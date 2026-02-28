@@ -1878,7 +1878,7 @@ namespace Frosty.Core.Screens
 
             context.Map(Buffer, 0, MapMode.WriteDiscard, Vortice.Direct3D11.MapFlags.None, out MappedSubresource mappedResource);
             {
-                using DataStream stream = new(mappedResource.DataPointer, Buffer.Description.ByteWidth, true, true);
+                using Vortice.DataStream stream = new(mappedResource.DataPointer, Buffer.Description.ByteWidth, true, true);
 
                 stream.Write(new Vector4((float)realBoneCount, 0, 0, 0));
                 foreach (Matrix4x4 boneMatrix in boneMatrices)
@@ -3116,7 +3116,7 @@ namespace Frosty.Core.Screens
                     // read staging texture
                     Viewport.Context.Map(resolveTexture, 0 /* subresource (0) % mipLevels */, 0 /* subresource (0) / mipLevels */, MapMode.Read, Vortice.Direct3D11.MapFlags.None, out uint mipSize, out MappedSubresource mappedResource);
                     {
-                        using DataStream stream = new(mappedResource.DataPointer, mipSize * mappedResource.RowPitch, true, true);
+                        using Vortice.DataStream stream = new(mappedResource.DataPointer, mipSize * mappedResource.RowPitch, true, true);
 
                         float invWidth = 1.0f / preintegratedSLDTexture.Texture.Description.Width;
                         float negativeBound = -1.0f + invWidth;
@@ -3840,7 +3840,7 @@ namespace Frosty.Core.Screens
             {
                 Viewport.Context.Map(postProcessConstants, 0, MapMode.WriteDiscard, Vortice.Direct3D11.MapFlags.None, out MappedSubresource mappedResource);
                 {
-                    using DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
+                    using Vortice.DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
 
                     float tU = 1.0f / (postProcessTexture.Texture.Description.Width);
                     float tV = 1.0f / (postProcessTexture.Texture.Description.Height);
@@ -3892,7 +3892,7 @@ namespace Frosty.Core.Screens
                 // first pass
                 Viewport.Context.Map(postProcessConstants, 0, MapMode.WriteDiscard, Vortice.Direct3D11.MapFlags.None, out MappedSubresource mappedResource);
                 {
-                    using DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
+                    using Vortice.DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
 
                     float tU = 1.0f / (3.0f * toneMapTextures[curTexture].Texture.Description.Width);
                     float tV = 1.0f / (3.0f * toneMapTextures[curTexture].Texture.Description.Height);
@@ -3940,7 +3940,7 @@ namespace Frosty.Core.Screens
                 {
                     Viewport.Context.Map(postProcessConstants, 0, MapMode.WriteDiscard, Vortice.Direct3D11.MapFlags.None, out MappedSubresource mappedResource);
                     {
-                        using DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
+                        using Vortice.DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
 
                         float tU = 1.0f / (toneMapTextures[curTexture + 1].Texture.Description.Width);
                         float tV = 1.0f / (toneMapTextures[curTexture + 1].Texture.Description.Height);
@@ -3987,7 +3987,7 @@ namespace Frosty.Core.Screens
                 // downscale 1x1
                 Viewport.Context.Map(postProcessConstants, 0, MapMode.WriteDiscard, Vortice.Direct3D11.MapFlags.None, out MappedSubresource mappedResource);
                 {
-                    using DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
+                    using Vortice.DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
 
                     float tU = 1.0f / (toneMapTextures[1].Texture.Description.Width);
                     float tV = 1.0f / (toneMapTextures[1].Texture.Description.Height);
@@ -4032,7 +4032,7 @@ namespace Frosty.Core.Screens
                 // calculate adapted luminance
                 Viewport.Context.Map(postProcessConstants, 0, MapMode.WriteDiscard, Vortice.Direct3D11.MapFlags.None, out MappedSubresource mappedResource);
                 {
-                    using DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
+                    using Vortice.DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
                     stream.Write((float)lastDeltaTime);
                 }
                 Viewport.Context.Unmap(postProcessConstants, 0);
@@ -4065,7 +4065,7 @@ namespace Frosty.Core.Screens
                 // read out average luminance
                 Viewport.Context.Map(toneMapTextures[6].Texture, 0, 0, MapMode.Read, Vortice.Direct3D11.MapFlags.None, out uint mipSize, out mappedResource);
                 {
-                    using DataStream stream = new(mappedResource.DataPointer, mipSize * mappedResource.RowPitch, true, true);
+                    using Vortice.DataStream stream = new(mappedResource.DataPointer, mipSize * mappedResource.RowPitch, true, true);
 
                     // store into a histogram
                     float avgLuminance = stream.Read<float>();
@@ -4117,7 +4117,7 @@ namespace Frosty.Core.Screens
                 {
                     Viewport.Context.Map(postProcessConstants, 0, MapMode.WriteDiscard, Vortice.Direct3D11.MapFlags.None, out MappedSubresource mappedResource);
                     {
-                        using DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
+                        using Vortice.DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
 
                         float tu = 1.0f / (float)blurTexture.Texture.Description.Width;
                         float tv = 1.0f / (float)blurTexture.Texture.Description.Height;
@@ -4182,7 +4182,7 @@ namespace Frosty.Core.Screens
                 {
                     Viewport.Context.Map(postProcessConstants, 0, MapMode.WriteDiscard, Vortice.Direct3D11.MapFlags.None, out MappedSubresource mappedResource);
                     {
-                        using DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
+                        using Vortice.DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
 
                         float tU = 1.0f / brightPassTexture.Texture.Description.Width;
                         float tV = 1.0f / brightPassTexture.Texture.Description.Height;
@@ -4225,7 +4225,7 @@ namespace Frosty.Core.Screens
                 {
                     Viewport.Context.Map(postProcessConstants, 0, MapMode.WriteDiscard, Vortice.Direct3D11.MapFlags.None, out MappedSubresource mappedResource);
                     {
-                        using DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
+                        using Vortice.DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
 
                         float tu = 1.0f / (float)bloomSourceTexture.Texture.Description.Width;
                         float tv = 1.0f / (float)bloomSourceTexture.Texture.Description.Height;
@@ -4290,7 +4290,7 @@ namespace Frosty.Core.Screens
                 {
                     Viewport.Context.Map(postProcessConstants, 0, MapMode.WriteDiscard, Vortice.Direct3D11.MapFlags.None, out MappedSubresource mappedResource);
                     {
-                        using DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
+                        using Vortice.DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
 
                         float tu = 1.0f / bloomTextures[2].Texture.Description.Width;
 
@@ -4349,7 +4349,7 @@ namespace Frosty.Core.Screens
                 {
                     Viewport.Context.Map(postProcessConstants, 0, MapMode.WriteDiscard, Vortice.Direct3D11.MapFlags.None, out MappedSubresource mappedResource);
                     {
-                        using DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
+                        using Vortice.DataStream stream = new(mappedResource.DataPointer, postProcessConstants.Description.ByteWidth, true, true);
 
                         float tu = 1.0f / bloomTextures[1].Texture.Description.Height;
 

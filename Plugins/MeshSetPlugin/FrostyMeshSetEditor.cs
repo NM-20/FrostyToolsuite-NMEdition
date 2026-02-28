@@ -1396,7 +1396,7 @@ namespace MeshSetPlugin
                 // populate input buffer
                 MappedSubresource mappedResource = device.ImmediateContext.Map(inputBuffer, MapMode.Write, MapFlags.None);
                 {
-                    using DataStream ds = new(mappedResource.DataPointer, inputBuffer.Description.ByteWidth, true, true);
+                    using Vortice.DataStream ds = new(mappedResource.DataPointer, inputBuffer.Description.ByteWidth, true, true);
 
                     for (int i = 0; i < tangentSpace.Count; i++)
                     {
@@ -1427,7 +1427,7 @@ namespace MeshSetPlugin
                 // read output buffer
                 mappedResource = device.ImmediateContext.Map(stagingBuffer, MapMode.Read, MapFlags.None);
                 {
-                    using DataStream ds = new(mappedResource.DataPointer, stagingBuffer.Description.ByteWidth, true, true);
+                    using Vortice.DataStream ds = new(mappedResource.DataPointer, stagingBuffer.Description.ByteWidth, true, true);
 
                     for (int i = 0; i < tangentSpace.Count; i++)
                     {

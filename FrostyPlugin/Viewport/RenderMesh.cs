@@ -390,7 +390,7 @@ namespace Frosty.Core.Viewport
 
             if (size > 0)
             {
-                using (DataStream stream = new DataStream(size, false, true))
+                using (Vortice.DataStream stream = new Vortice.DataStream(size, false, true))
                 {
                     foreach (ShaderParameter param in PixelParameters)
                     {
@@ -452,7 +452,7 @@ namespace Frosty.Core.Viewport
 
             if (size > 0)
             {
-                using (DataStream stream = new DataStream(size, false, true))
+                using (Vortice.DataStream stream = new Vortice.DataStream(size, false, true))
                 {
                     foreach (ShaderParameter param in PixelParameters)
                     {
@@ -1135,14 +1135,14 @@ namespace Frosty.Core.Viewport
                 ID3D11DeviceContext context = state.Device.ImmediateContext;
 
                 context.Map(section.PixelParameters, 0, MapMode.WriteDiscard, MapFlags.None, out MappedSubresource mappedResource);
-                using DataStream stream = new(mappedResource.DataPointer, section.PixelParameters.Description.ByteWidth, true, true);
+                using Vortice.DataStream stream = new(mappedResource.DataPointer, section.PixelParameters.Description.ByteWidth, true, true);
 
                 stream.Write(outData, 0, outData.Length);
                 context.Unmap(section.PixelParameters, 0);
             }
             else
             {
-                using (DataStream stream = new DataStream(size, false, true))
+                using (Vortice.DataStream stream = new Vortice.DataStream(size, false, true))
                 {
                     stream.Write(outData, 0, outData.Length);
                     stream.Position = 0;
@@ -2263,7 +2263,7 @@ namespace Frosty.Core.Viewport
         /// </summary>
         private unsafe MeshRenderShape(RenderCreateState state, string inName, string shaderName, List<ShapeVertex> vertices, List<ushort> indices)
         {
-            using (DataStream stream = new DataStream(indices.Count * 2, false, true))
+            using (Vortice.DataStream stream = new Vortice.DataStream(indices.Count * 2, false, true))
             {
                 stream.WriteRange<ushort>(indices.ToArray());
                 stream.Position = 0;
@@ -2271,7 +2271,7 @@ namespace Frosty.Core.Viewport
                 ReadOnlySpan<byte> data = new(stream.BaseUnsafePointer, indices.Count * 2);
                 indexBuffer = state.Device.CreateBuffer(data, BindFlags.IndexBuffer, ResourceUsage.Default, CpuAccessFlags.None, ResourceOptionFlags.None, structureByteStride: 2);
             }
-            using (DataStream stream = new DataStream(vertices.Count * (4 * 8), false, true))
+            using (Vortice.DataStream stream = new Vortice.DataStream(vertices.Count * (4 * 8), false, true))
             {
                 stream.WriteRange<ShapeVertex>(vertices.ToArray());
                 stream.Position = 0;
