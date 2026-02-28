@@ -264,7 +264,7 @@ namespace Frosty.Core
                 if (!Directory.Exists(App.GlobalSettingsPath))
                     Directory.CreateDirectory(App.GlobalSettingsPath);
 
-                File.Move("config.json", App.PluginManager.ManagerType == PluginManagerType.Editor ? $"{App.GlobalSettingsPath}/editor_config.json" : $"{App.GlobalSettingsPath}/manager_config.json");
+                File.Move("config.json", Path.Combine(App.GlobalSettingsPath, $"Config.json"));
             }
             else
             {
@@ -457,7 +457,7 @@ namespace Frosty.Core
         public static void Save(string path = "")
         {
             if (path == "")
-                path = App.PluginManager.ManagerType == PluginManagerType.Editor ? $"{App.GlobalSettingsPath}/editor_config.json" : $"{App.GlobalSettingsPath}/manager_config.json";
+                path = Path.Combine(App.GlobalSettingsPath, $"Config.json");
 
             if (!Directory.Exists(App.GlobalSettingsPath))
                 Directory.CreateDirectory(App.GlobalSettingsPath);
@@ -475,7 +475,7 @@ namespace Frosty.Core
         public static void Load(string path = "")
         {
             if (path == "")
-                path = App.PluginManager.ManagerType == PluginManagerType.Editor ? $"{App.GlobalSettingsPath}/editor_config.json" : $"{App.GlobalSettingsPath}/manager_config.json";
+                path = Path.Combine(App.GlobalSettingsPath, $"Config.json");
 
             using (StreamReader reader = new StreamReader(path))
             {
