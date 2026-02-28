@@ -326,8 +326,10 @@ namespace FrostySdk.IO
 
             int size = (int)inStream.Length;
 
-            byte[] tmpBuffer = new byte[size];
-            inStream.Read(tmpBuffer, 0, size);
+            byte[] buffer = new byte[size];
+            inStream.Read(buffer, 0, size);
+
+            var decryptedBuffer = new byte[buffer.Length];
 
             using (Aes aes = Aes.Create())
             {
@@ -335,16 +337,16 @@ namespace FrostySdk.IO
                 aes.IV = encryptionKey;
 
                 ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-                using (MemoryStream decryptStream = new MemoryStream(tmpBuffer))
+                using (MemoryStream decryptStream = new MemoryStream(buffer))
                 {
                     using (CryptoStream cryptoStream = new CryptoStream(decryptStream, decryptor, CryptoStreamMode.Read))
-                        cryptoStream.Read(tmpBuffer, 0, size);
+                        cryptoStream.Read(decryptedBuffer, 0, size);
                 }
             }
 
             inStream.Dispose();
-            Array.Resize<byte>(ref tmpBuffer, (int)actualSize);
-            return new MemoryStream(tmpBuffer);
+            Array.Resize<byte>(ref decryptedBuffer, (int)actualSize);
+            return new MemoryStream(decryptedBuffer);
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using SharpDX;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Numerics;
 
 namespace MeshSetPlugin.Render
 {
@@ -78,13 +78,13 @@ namespace MeshSetPlugin.Render
                 Vector3? translation = interpolatedValues[index].Translation;
                 Vector3? scale = interpolatedValues[index].Scale;
 
-                skelBone.LocalPose.Decompose(out Vector3 skelScale, out Quaternion skelRotation, out Vector3 skelTranslation);
+                Matrix4x4.Decompose(skelBone.LocalPose, out Vector3 skelScale, out Quaternion skelRotation, out Vector3 skelTranslation);
 
                 if (!rotation.HasValue) rotation = skelRotation;
                 if (!translation.HasValue) translation = skelTranslation;
                 if (!scale.HasValue) scale = skelScale;
 
-                skeleton.UpdateBone(skeleton.GetBoneId(skelBone.NameHash), localPose: Matrix.Scaling(scale.Value) * Matrix.RotationQuaternion(rotation.Value) * Matrix.Translation(translation.Value));
+                skeleton.UpdateBone(skeleton.GetBoneId(skelBone.NameHash), localPose: Matrix4x4.CreateScale(scale.Value) * Matrix4x4.CreateFromQuaternion(rotation.Value) * Matrix4x4.CreateTranslation(translation.Value));
             }
         }
 

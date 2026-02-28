@@ -1,9 +1,9 @@
 ﻿using FrostySdk.IO;
 using FrostySdk.Managers;
 using FrostySdk.Resources;
-using SharpDX;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 
 namespace SvgImagePlugin
 {

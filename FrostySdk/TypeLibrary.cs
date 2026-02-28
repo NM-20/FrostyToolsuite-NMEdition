@@ -666,7 +666,7 @@ namespace FrostySdk
             }
 
             AssemblyName name = new AssemblyName(ModuleName);
-            assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(name, AssemblyBuilderAccess.Run);
+            assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(name, AssemblyBuilderAccess.Run);
             moduleBuilder = assemblyBuilder.DefineDynamicModule(ModuleName);
         }
 
@@ -865,8 +865,9 @@ namespace FrostySdk
         {
             AssemblyName name = new AssemblyName(ModuleName);
             //assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(name, AssemblyBuilderAccess.Save);
-            assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(name, AssemblyBuilderAccess.Save);
-            moduleBuilder = assemblyBuilder.DefineDynamicModule(ModuleName, sdkFilename + ".dll");
+            var builder = new PersistedAssemblyBuilder(name, typeof(object).Assembly);
+            assemblyBuilder = builder;
+            moduleBuilder = assemblyBuilder.DefineDynamicModule(ModuleName);
 
             foreach (DbObject classObj in classList)
             {
@@ -966,7 +967,7 @@ namespace FrostySdk
                 }
             }
 
-            assemblyBuilder.Save(sdkFilename + ".dll");
+            builder.Save(sdkFilename + ".dll");
         }
 
         private static Type GetTypeFromEbxType(EbxFieldType inType, string baseType, int arrayType = -1)

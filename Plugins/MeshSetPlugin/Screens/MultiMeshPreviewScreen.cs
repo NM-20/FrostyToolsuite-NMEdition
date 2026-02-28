@@ -3,9 +3,10 @@ using Frosty.Core.Viewport;
 using FrostySdk.Managers;
 using MeshSetPlugin.Render;
 using MeshSetPlugin.Resources;
-using SharpDX;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
+using Vortice.Mathematics;
 using DXUT = Frosty.Core.Viewport.DXUT;
 
 namespace MeshSetPlugin.Screens
@@ -16,10 +17,10 @@ namespace MeshSetPlugin.Screens
         public MeshRenderMesh Preview;
         public MeshMaterialCollection Materials;
         public bool bUpdateMaterials;
-        public Matrix Transform;
+        public Matrix4x4 Transform;
         public int MeshId;
 
-        public MeshAndPreviewContainer(int inMeshId, MeshSet inMesh, MeshRenderMesh inPreview, Matrix inTransform, MeshMaterialCollection inMaterials)
+        public MeshAndPreviewContainer(int inMeshId, MeshSet inMesh, MeshRenderMesh inPreview, Matrix4x4 inTransform, MeshMaterialCollection inMaterials)
         {
             MeshId = inMeshId;
             Mesh = inMesh;
@@ -57,7 +58,7 @@ namespace MeshSetPlugin.Screens
             return renderMeshes[meshId].Mesh;
         }
 
-        public int AddMesh(MeshSet mesh, MeshMaterialCollection materials, Matrix transform, MeshRenderSkeleton skeleton = null)
+        public int AddMesh(MeshSet mesh, MeshMaterialCollection materials, Matrix4x4 transform, MeshRenderSkeleton skeleton = null)
         {
             int meshId = currentMeshId;
             renderTasks.Enqueue((RenderCreateState state) =>
@@ -75,7 +76,7 @@ namespace MeshSetPlugin.Screens
             return currentMeshId++;
         }
 
-        public int AddLight(LightRenderType type, Matrix transform, Vector3 color, float intensity, float attenuationRadius, float sphereRadius)
+        public int AddLight(LightRenderType type, Matrix4x4 transform, Vector3 color, float intensity, float attenuationRadius, float sphereRadius)
         {
             renderLights.Add(new LightRenderInstance()
             {
@@ -90,7 +91,7 @@ namespace MeshSetPlugin.Screens
             return currentLightId++;
         }
 
-        public void ModifyLight(int lightId, Matrix transform, Vector3 color, float intensity, float attenuationRadius, float sphereRadius)
+        public void ModifyLight(int lightId, Matrix4x4 transform, Vector3 color, float intensity, float attenuationRadius, float sphereRadius)
         {
             int idx = renderLights.FindIndex((LightRenderInstance inst) => inst.LightId == lightId);
             if (idx != -1)
@@ -156,7 +157,7 @@ namespace MeshSetPlugin.Screens
             });
         }
 
-        public void SetTransform(int meshId, Matrix transform)
+        public void SetTransform(int meshId, Matrix4x4 transform)
         {
             renderTasks.Enqueue((RenderCreateState state) =>
             {
@@ -354,14 +355,14 @@ namespace MeshSetPlugin.Screens
             if (camera is DXUT.ModelViewerCamera mvCamera)
             {
                 mvCamera.Reset();
-                mvCamera.SetLookAtPt(aabb.Minimum + (aabb.Maximum - aabb.Minimum) * 0.5f);
-                mvCamera.SetEyePt(aabb.Minimum + (aabb.Maximum - aabb.Minimum) * 0.5f + Vector3.UnitY);
-                mvCamera.SetRadius((aabb.Maximum - aabb.Minimum).Length() * 1.0f);
+                mvCamera.SetLookAtPt(aabb.Min + (aabb.Max - aabb.Min) * 0.5f);
+                mvCamera.SetEyePt(aabb.Min + (aabb.Max - aabb.Min) * 0.5f + Vector3.UnitY);
+                mvCamera.SetRadius((aabb.Max - aabb.Min).Length() * 1.0f);
             }
             else if (camera is DXUT.FirstPersonCamera fpCamera)
             {
-                Vector3 center = aabb.Minimum + (aabb.Maximum - aabb.Minimum) * 0.5f;
-                Vector3 offset = center + new Vector3(0, Math.Abs(aabb.Maximum.Y - aabb.Minimum.Y) / 1.25f, (aabb.Maximum - aabb.Minimum).Length() * 0.9f);
+                Vector3 center = aabb.Min + (aabb.Max - aabb.Min) * 0.5f;
+                Vector3 offset = center + new Vector3(0, Math.Abs(aabb.Max.Y - aabb.Min.Y) / 1.25f, (aabb.Max - aabb.Min).Length() * 0.9f);
                 if (offset.Y < 0.5f)
                     offset.Y = 0.5f;
 
@@ -377,17 +378,17 @@ namespace MeshSetPlugin.Screens
             foreach (MeshAndPreviewContainer mesh in renderMeshes)
             {
                 BoundingBox bb = mesh.Preview.Bounds;
-                bb.Minimum = (bb.Minimum + mesh.Transform.TranslationVector) * new Vector3(-1, 1, 1);
-                bb.Maximum = (bb.Maximum + mesh.Transform.TranslationVector) * new Vector3(-1, 1, 1);
+                bb.Min = (bb.Min + mesh.Transform.Translation) * new Vector3(-1, 1, 1);
+                bb.Max = (bb.Max + mesh.Transform.Translation) * new Vector3(-1, 1, 1);
 
-                float tmp = bb.Minimum.X;
-                bb.Minimum.X = bb.Maximum.X;
-                bb.Maximum.X = tmp;
+                float tmp = bb.Min.X;
+                bb.Min.X = bb.Max.X;
+                bb.Max.X = tmp;
 
                 if (i++ == 0)
                     aabb = bb;
                 else
-                    aabb = BoundingBox.Merge(aabb, bb);
+                    aabb = BoundingBox.CreateMerged(aabb, bb);
             }
 
             return aabb;

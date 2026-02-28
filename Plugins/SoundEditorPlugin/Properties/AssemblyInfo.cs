@@ -34,6 +34,3 @@ using System.Windows;
 [assembly: RegisterAssetDefinition("HarmonySampleBankAsset", typeof(HarmonySampleBankAssetDefinition))]
 [assembly: RegisterAssetDefinition("OctaneAsset", typeof(OctaneAssetDefinition))]
 [assembly: RegisterAssetDefinition("ImpulseResponseAsset", typeof(ImpulseResponseAssetDefinition))]
-
-[assembly: RegisterThirdPartyDll("NAudio")]
-[assembly: RegisterThirdPartyDll("NAudio.WaveFormRenderer")]

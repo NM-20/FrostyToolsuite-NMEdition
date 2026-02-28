@@ -12,15 +12,15 @@ using FrostySdk;
 using System.Windows.Data;
 using System.Globalization;
 using FrostySdk.Ebx;
-using Buffer = SharpDX.Direct3D11.Buffer;
+using Buffer = Vortice.Direct3D11.ID3D11Buffer;
 using FrostySdk.Attributes;
 using Frosty.Hash;
 using Frosty.Core.Controls;
 using Frosty.Core;
 using Frosty.Core.Controls.Editors;
 using Frosty.Core.Windows;
-using SharpDX;
-using SharpDX.Direct3D11;
+using Vortice;
+using Vortice.Direct3D11;
 using Frosty.Core.Screens;
 using MeshSetPlugin.Fbx;
 using System.Reflection;
@@ -29,6 +29,10 @@ using MeshSetPlugin.Render;
 using MeshSetPlugin.Resources;
 using MeshSetPlugin.Editors;
 using Frosty.Controls;
+using System.Numerics;
+using Vortice.Direct3D;
+using Vortice.Mathematics;
+using Frosty.Core.Extensions;
 
 namespace MeshSetPlugin
 {
@@ -399,10 +403,10 @@ namespace MeshSetPlugin
                         LinearTransform lt = lod.PartTransforms[i];
                         FbxNode node = boneNodes[i];
 
-                        Matrix boneMatrix = SharpDXUtils.FromLinearTransform(lt);
+                        Matrix4x4 boneMatrix = SharpDXUtils.FromLinearTransform(lt);
 
-                        Vector3 scale = boneMatrix.ScaleVector;
-                        Vector3 translation = boneMatrix.TranslationVector;
+                        Vector3 scale = boneMatrix.Scale;
+                        Vector3 translation = boneMatrix.Translation;
                         Vector3 euler = SharpDXUtils.ExtractEulerAngles(boneMatrix);
 
                         node.LclTranslation = new Vector3(translation.X, translation.Y, translation.Z);
@@ -511,7 +515,7 @@ namespace MeshSetPlugin
                                 }
                                 else if (type == 0xE)
                                 {
-                                    Vector3 euler = SharpDXUtils.ExtractEulerAngles(Matrix.RotationQuaternion(q));
+                                    Vector3 euler = SharpDXUtils.ExtractEulerAngles(Matrix4x4.CreateFromQuaternion(q));
                                     node.LclRotation = euler;
                                 }
                                 else
@@ -561,10 +565,10 @@ namespace MeshSetPlugin
             FbxNode rootNode = new FbxNode(scene, "ROOT");
             rootNode.SetNodeAttribute(skeletonAttribute);
 
-            Matrix boneMatrix = Matrix.Identity;
+            Matrix4x4 boneMatrix = Matrix4x4.Identity;
 
-            Vector3 scale = boneMatrix.ScaleVector;
-            Vector3 translation = boneMatrix.TranslationVector;
+            Vector3 scale = boneMatrix.Scale;
+            Vector3 translation = boneMatrix.Translation;
             Vector3 euler = SharpDXUtils.ExtractEulerAngles(boneMatrix);
 
             rootNode.LclTranslation = new Vector3(translation.X, translation.Y, translation.Z);
@@ -582,10 +586,10 @@ namespace MeshSetPlugin
                 boneNode.SetNodeAttribute(skeletonAttribute);
 
                 // parts are skinned to identity then moved
-                boneMatrix = Matrix.Identity;
+                boneMatrix = Matrix4x4.Identity;
 
-                scale = boneMatrix.ScaleVector;
-                translation = boneMatrix.TranslationVector;
+                scale = boneMatrix.Scale;
+                translation = boneMatrix.Translation;
                 euler = SharpDXUtils.ExtractEulerAngles(boneMatrix);
 
                 boneNode.LclTranslation = new Vector3(translation.X, translation.Y, translation.Z);
@@ -611,15 +615,15 @@ namespace MeshSetPlugin
             for (int boneIdx = 0; boneIdx < boneCount; boneIdx++)
             {
                 dynamic pose = skeletonAsset.LocalPose;
-                Matrix boneMatrix = new Matrix(
+                Matrix4x4 boneMatrix = new(
                     pose[boneIdx].right.x, pose[boneIdx].right.y, pose[boneIdx].right.z, 0.0f,
                     pose[boneIdx].up.x, pose[boneIdx].up.y, pose[boneIdx].up.z, 0.0f,
                     pose[boneIdx].forward.x, pose[boneIdx].forward.y, pose[boneIdx].forward.z, 0.0f,
                     pose[boneIdx].trans.x, pose[boneIdx].trans.y, pose[boneIdx].trans.z, 1.0f
                     );
 
-                Vector3 scale = boneMatrix.ScaleVector;
-                Vector3 translation = boneMatrix.TranslationVector;
+                Vector3 scale = boneMatrix.Scale;
+                Vector3 translation = boneMatrix.Translation;
                 Vector3 euler = SharpDXUtils.ExtractEulerAngles(boneMatrix);
 
                 FbxSkeleton skeletonAttribute = new FbxSkeleton(scene, skeletonAsset.BoneNames[boneIdx]);
@@ -652,15 +656,15 @@ namespace MeshSetPlugin
                     string boneName = "PROC_Bone" + (procIndex++).ToString();
 
                     FbxNode parentBone = boneNodes[bone.ParentIndex];
-                    Matrix boneMatrix = new Matrix(
+                    Matrix4x4 boneMatrix = new Matrix4x4(
                         bone.Pose.right.x, bone.Pose.right.y, bone.Pose.right.z, 0.0f,
                         bone.Pose.up.x, bone.Pose.up.y, bone.Pose.up.z, 0.0f,
                         bone.Pose.forward.x, bone.Pose.forward.y, bone.Pose.forward.z, 0.0f,
                         bone.Pose.trans.x, bone.Pose.trans.y, bone.Pose.trans.z, 1.0f
                     );
 
-                    Vector3 scale = boneMatrix.ScaleVector;
-                    Vector3 translation = boneMatrix.TranslationVector;
+                    Vector3 scale = boneMatrix.Scale;
+                    Vector3 translation = boneMatrix.Translation;
                     Vector3 euler = SharpDXUtils.ExtractEulerAngles(boneMatrix);
 
                     FbxSkeleton skeletonAttribute = new FbxSkeleton(scene, boneName);
@@ -1349,49 +1353,51 @@ namespace MeshSetPlugin
                 }
 
                 // use compute shader to unpack tangent space to TBN
-                Device device = FrostyDeviceManager.Current.GetDevice();
-                ComputeShader cs = FrostyShaderDb.GetShader<ComputeShader>(device, shaderName);
-                Buffer inputBuffer = new Buffer(device, new BufferDescription()
+                ID3D11Device device = FrostyDeviceManager.Current.GetDevice();
+                ID3D11ComputeShader cs = FrostyShaderDb.GetShader<ID3D11ComputeShader>(device, shaderName);
+                Buffer inputBuffer = device.CreateBuffer(new BufferDescription()
                 {
                     BindFlags = BindFlags.ShaderResource,
-                    CpuAccessFlags = CpuAccessFlags.Write,
-                    OptionFlags = ResourceOptionFlags.BufferStructured,
-                    SizeInBytes = inputSize,
+                    CPUAccessFlags = CpuAccessFlags.Write,
+                    MiscFlags = ResourceOptionFlags.BufferStructured,
+                    ByteWidth = (uint)(inputSize),
                     StructureByteStride = 4,
                     Usage = ResourceUsage.Default
                 });
-                Buffer outputBuffer = new Buffer(device, new BufferDescription()
+                Buffer outputBuffer = device.CreateBuffer(new BufferDescription()
                 {
                     BindFlags = BindFlags.UnorderedAccess,
-                    CpuAccessFlags = CpuAccessFlags.None,
-                    OptionFlags = ResourceOptionFlags.BufferStructured,
-                    SizeInBytes = tangentSpace.Count * 3 * 4 * 4,
+                    CPUAccessFlags = CpuAccessFlags.None,
+                    MiscFlags = ResourceOptionFlags.BufferStructured,
+                    ByteWidth = (uint)(tangentSpace.Count * 3 * 4 * 4),
                     StructureByteStride = 4 * 4,
                     Usage = ResourceUsage.Default
                 });
-                Buffer stagingBuffer = new Buffer(device, new BufferDescription()
+                Buffer stagingBuffer = device.CreateBuffer(new BufferDescription()
                 {
                     BindFlags = BindFlags.None,
-                    CpuAccessFlags = CpuAccessFlags.Read,
-                    OptionFlags = ResourceOptionFlags.BufferStructured,
+                    CPUAccessFlags = CpuAccessFlags.Read,
+                    MiscFlags = ResourceOptionFlags.BufferStructured,
                     Usage = ResourceUsage.Staging,
-                    SizeInBytes = tangentSpace.Count * 3 * 4 * 4,
+                    ByteWidth = (uint)(tangentSpace.Count * 3 * 4 * 4),
                     StructureByteStride = 4 * 4
                 });
-                ShaderResourceView u0 = new ShaderResourceView(device, inputBuffer, new ShaderResourceViewDescription()
+                ID3D11ShaderResourceView u0 = device.CreateShaderResourceView(inputBuffer, new ShaderResourceViewDescription()
                 {
-                    Dimension = SharpDX.Direct3D.ShaderResourceViewDimension.ExtendedBuffer,
-                    BufferEx = new ShaderResourceViewDescription.ExtendedBufferResource()
+                    ViewDimension = ShaderResourceViewDimension.BufferExtended,
+                    BufferEx = new BufferExtendedShaderResourceView()
                     {
-                        ElementCount = inputSize / 4,
+                        NumElements = (uint)(inputSize / 4),
                         FirstElement = 0
                     }
                 });
-                UnorderedAccessView u1 = new UnorderedAccessView(device, outputBuffer);
+                ID3D11UnorderedAccessView u1 = device.CreateUnorderedAccessView(outputBuffer);
 
                 // populate input buffer
-                device.ImmediateContext.MapSubresource(inputBuffer, MapMode.Write, MapFlags.None, out DataStream ds);
+                MappedSubresource mappedResource = device.ImmediateContext.Map(inputBuffer, MapMode.Write, MapFlags.None);
                 {
+                    using DataStream ds = new(mappedResource.DataPointer, inputBuffer.Description.ByteWidth, true, true);
+
                     for (int i = 0; i < tangentSpace.Count; i++)
                     {
                         if (tangentSpace[i] is uint)
@@ -1407,29 +1413,31 @@ namespace MeshSetPlugin
                     }
                     ds.Position = 0;
                 }
-                device.ImmediateContext.UnmapSubresource(inputBuffer, 0);
+                device.ImmediateContext.Unmap(inputBuffer, 0);
 
                 // run compute shader
-                device.ImmediateContext.ComputeShader.Set(cs);
-                device.ImmediateContext.ComputeShader.SetShaderResource(0, u0);
-                device.ImmediateContext.ComputeShader.SetUnorderedAccessViews(0, u1);
-                device.ImmediateContext.Dispatch(tangentSpace.Count, 1, 1);
-                device.ImmediateContext.ComputeShader.Set(null);
-                device.ImmediateContext.ComputeShader.SetUnorderedAccessViews(0, new UnorderedAccessView[] { null, null });
-                device.ImmediateContext.CopyResource(outputBuffer, stagingBuffer);
+                device.ImmediateContext.CSSetShader(cs);
+                device.ImmediateContext.CSSetShaderResource(0, u0);
+                device.ImmediateContext.CSSetUnorderedAccessView(0, u1);
+                device.ImmediateContext.Dispatch((uint)(tangentSpace.Count), 1, 1);
+                device.ImmediateContext.CSSetShader(null);
+                device.ImmediateContext.CSSetUnorderedAccessViews(0, new ID3D11UnorderedAccessView[2]);
+                device.ImmediateContext.CopyResource(stagingBuffer, outputBuffer);
 
                 // read output buffer
-                device.ImmediateContext.MapSubresource(stagingBuffer, MapMode.Read, MapFlags.None, out ds);
+                mappedResource = device.ImmediateContext.Map(stagingBuffer, MapMode.Read, MapFlags.None);
                 {
+                    using DataStream ds = new(mappedResource.DataPointer, stagingBuffer.Description.ByteWidth, true, true);
+
                     for (int i = 0; i < tangentSpace.Count; i++)
                     {
-                        Matrix4x3 m = ds.Read<Matrix4x3>();
+                        Frosty.Core.Screens.Matrix4x3 m = ds.Read<Frosty.Core.Screens.Matrix4x3>();
                         layerElemTangent.DirectArray.Add(m.M11, m.M21, m.M31, 1.0f);
                         layerElemBinormal.DirectArray.Add(m.M12, m.M22, m.M32, 1.0f);
                         layerElemNormal.DirectArray.Add(m.M13, m.M23, m.M33, 1.0f);
                     }
                 }
-                device.ImmediateContext.UnmapSubresource(stagingBuffer, 0);
+                device.ImmediateContext.Unmap(stagingBuffer, 0);
 
                 // dispose
                 u0.Dispose();
@@ -1651,7 +1659,7 @@ namespace MeshSetPlugin
                     throw new FBXImportInvalidLodCountException();
 
                 meshSet.ClearPartData();
-                List<BoundingBox> partBbox = new List<BoundingBox>();
+                List<BoundingBox> partBbox = new();
                 List<LinearTransform> transforms = new List<LinearTransform>();
                 // process each lod
                 for (int i = 0; i < meshSet.Lods.Count; i++)
@@ -1679,14 +1687,14 @@ namespace MeshSetPlugin
             foreach (BoundingBox bbox in inBoundingBoxes)
             {
                 Vec3 min = new Vec3();
-                min.x = bbox.Minimum.X;
-                min.y = bbox.Minimum.Y;
-                min.z = bbox.Minimum.Z;
+                min.x = bbox.Min.X;
+                min.y = bbox.Min.Y;
+                min.z = bbox.Min.Z;
 
                 Vec3 max = new Vec3();
-                max.x = bbox.Maximum.X;
-                max.y = bbox.Maximum.Y;
-                max.z = bbox.Maximum.Z;
+                max.x = bbox.Max.X;
+                max.y = bbox.Max.Y;
+                max.z = bbox.Max.Z;
                 
                 retVal.Add(new AxisAlignedBox(){min = min, max =  max});
             }
@@ -1984,15 +1992,15 @@ namespace MeshSetPlugin
             // Setup the rotation matrix
             Vector3 fbxRotation = new Vector3(inFbxNode.LclRotation.X * pi, inFbxNode.LclRotation.Y * pi, inFbxNode.LclRotation.Z * pi);
 
-            Matrix rotMatrix = Matrix.Identity;
+            Matrix4x4 rotMatrix = Matrix4x4.Identity;
 
-            rotMatrix *= Matrix.RotationX(fbxRotation.X);
-            rotMatrix *= Matrix.RotationY(fbxRotation.Y);
-            rotMatrix *= Matrix.RotationZ(fbxRotation.Z);
+            rotMatrix *= Matrix4x4.CreateRotationX(fbxRotation.X);
+            rotMatrix *= Matrix4x4.CreateRotationY(fbxRotation.Y);
+            rotMatrix *= Matrix4x4.CreateRotationZ(fbxRotation.Z);
 
             // Now create the LinearTransform matrix
             Vector3 nodeScale = inFbxNode.LclScaling;
-            Matrix fbMatrix = new Matrix();
+            Matrix4x4 fbMatrix = new();
             fbMatrix.M11 = rotMatrix.M11 * nodeScale.X;
             fbMatrix.M12 = rotMatrix.M12 * nodeScale.Y;
             fbMatrix.M13 = rotMatrix.M13 * nodeScale.Z;
@@ -2034,7 +2042,7 @@ namespace MeshSetPlugin
             return trns;
         }
 
-        private List<Vector3> GetVerticesFromCluster(FbxMesh fmesh, FbxCluster cluster, Matrix sectionMatrix)
+        private List<Vector3> GetVerticesFromCluster(FbxMesh fmesh, FbxCluster cluster, Matrix4x4 sectionMatrix)
         {
             IntPtr verticesBuffer = fmesh.GetControlPoints();
 
@@ -2065,7 +2073,7 @@ namespace MeshSetPlugin
                     position = new Vector3((float)pointsPtr[XAxis] * Scale, (float)pointsPtr[YAxis] * Scale, (float)(pointsPtr[ZAxis] * FlipZ) * Scale);
                 }
 
-                Vector4 tmp = Vector3.Transform(position, sectionMatrix);
+                Vector3 tmp = Vector3.Transform(position, sectionMatrix);
                 position.X = tmp.X;
                 position.Y = tmp.Y;
                 position.Z = tmp.Z;
@@ -2104,7 +2112,7 @@ namespace MeshSetPlugin
                     ushort idx = ushort.Parse(bone.Name.Substring(bone.Name.LastIndexOf('_') + 1));
                     boneList.Add(idx);
 
-                    Matrix sectionMatrix = new FbxMatrix(node.EvaluateGlobalTransform()).ToSharpDX();
+                    Matrix4x4 sectionMatrix = new FbxMatrix(node.EvaluateGlobalTransform()).ToSharpDX();
 
                     if (!boneToVerticesMapping.ContainsKey(idx))
                     {
@@ -2140,7 +2148,7 @@ namespace MeshSetPlugin
                 partAABBs[boneAndVertices.Key] = aabbs.Item1;
                 if (bbox.Count > boneAndVertices.Key)
                 {
-                    bbox[boneAndVertices.Key] = BoundingBox.Merge(bbox[boneAndVertices.Key], aabbs.Item2);
+                    bbox[boneAndVertices.Key] = BoundingBox.CreateMerged(bbox[boneAndVertices.Key], aabbs.Item2);
                 }
                 else
                 {
@@ -2310,7 +2318,7 @@ namespace MeshSetPlugin
                 if (fmesh.GetElementTangent(0) == null || fmesh.GetElementBinormal(0) == null)
                     throw new FBXImportMissingTangentsException();
 
-                Matrix sectionMatrix = new FbxMatrix(sectionNode.EvaluateGlobalTransform()).ToSharpDX();
+                Matrix4x4 sectionMatrix = new FbxMatrix(sectionNode.EvaluateGlobalTransform()).ToSharpDX();
 
                 List<List<ushort>> boneIndices = new List<List<ushort>>();
                 List<List<byte>> boneWeights = new List<List<byte>>();
@@ -2552,7 +2560,7 @@ namespace MeshSetPlugin
                                             if (vc.ReferenceMode != EReferenceMode.eDirect)
                                                 vc.IndexArray.GetAt(mappingIndex, out actualIndex);
 
-                                            vc.DirectArray.GetAt(actualIndex, out ColorBGRA color);
+                                            vc.DirectArray.GetAt(actualIndex, out ColorBgra color);
                                             vertex.SetValue("Color0", color);
                                         }
                                     }
@@ -2568,7 +2576,7 @@ namespace MeshSetPlugin
                                             if (vc.ReferenceMode != EReferenceMode.eDirect)
                                                 vc.IndexArray.GetAt(mappingIndex, out actualIndex);
 
-                                            vc.DirectArray.GetAt(actualIndex, out ColorBGRA color);
+                                            vc.DirectArray.GetAt(actualIndex, out ColorBgra color);
                                             vertex.SetValue("Color1", color);
                                         }
                                     }
@@ -2600,7 +2608,7 @@ namespace MeshSetPlugin
                                             if (layerColor.ReferenceMode != EReferenceMode.eDirect)
                                                 layerColor.IndexArray.GetAt(mappingIndex, out actualIndex);
 
-                                            layerColor.DirectArray.GetAt(actualIndex, out ColorBGRA color);
+                                            layerColor.DirectArray.GetAt(actualIndex, out ColorBgra color);
                                             vertex.SetValue("Delta", color);
                                         }
                                     }
@@ -2616,7 +2624,7 @@ namespace MeshSetPlugin
                                             if (layerColor.ReferenceMode != EReferenceMode.eDirect)
                                                 layerColor.IndexArray.GetAt(mappingIndex, out actualIndex);
 
-                                            layerColor.DirectArray.GetAt(actualIndex, out ColorBGRA color);
+                                            layerColor.DirectArray.GetAt(actualIndex, out ColorBgra color);
                                             vertex.SetValue("Delta", color.R / 255.0f);
                                         }
                                     }
@@ -2632,7 +2640,7 @@ namespace MeshSetPlugin
                                             if (layerColor.ReferenceMode != EReferenceMode.eDirect)
                                                 layerColor.IndexArray.GetAt(mappingIndex, out actualIndex);
 
-                                            layerColor.DirectArray.GetAt(actualIndex, out ColorBGRA color);
+                                            layerColor.DirectArray.GetAt(actualIndex, out ColorBgra color);
                                             vertex.SetValue("Delta", (int)color.R);
                                         }
                                     }
@@ -2775,7 +2783,7 @@ namespace MeshSetPlugin
                         foreach (DbObject vertex in vertices)
                         {
                             Vector4 tmp = vertex.GetValue<Vector4>("Pos");
-                            Vector4 position = Vector3.Transform(new Vector3(tmp.X, tmp.Y, tmp.Z), sectionMatrix);
+                            Vector3 position = Vector3.Transform(new Vector3(tmp.X, tmp.Y, tmp.Z), sectionMatrix);
 
                             Vector3 normal = Vector3.TransformNormal(vertex.GetValue<Vector3>("Normal"), sectionMatrix);
                             Vector3 tangent = Vector3.TransformNormal(vertex.GetValue<Vector3>("Tangent"), sectionMatrix);
@@ -2958,14 +2966,14 @@ namespace MeshSetPlugin
                                                         Z = binormal.X - tangent.Y,
                                                         W = 1.0f + tangent.X + binormal.Y + normal.Z
                                                     };
-                                                    quat.Normalize();
+                                                    quat = Quaternion.Normalize(quat);
 
                                                     int idx = FindGreatestComponent(quat);
                                                     if (idx == 0) quat = new Quaternion(quat.W, quat.X, quat.Y, quat.Z);
                                                     if (idx == 1) quat = new Quaternion(quat.X, quat.W, quat.Y, quat.Z);
                                                     if (idx == 2) quat = new Quaternion(quat.X, quat.Y, quat.W, quat.Z);
 
-                                                    Vector3 tmpQuat = new Vector3(quat.X, quat.Y, quat.Z) * Math.Sign(quat.W) * (float)Math.Sqrt(0.5f) + 0.5f;
+                                                    Vector3 tmpQuat = new Vector3(quat.X, quat.Y, quat.Z) * Math.Sign(quat.W) * (float)Math.Sqrt(0.5f) + new Vector3(0.5f, 0.5f, 0.5f);
                                                     Vector4 packedQuat = new Vector4(tmpQuat.X, tmpQuat.Y, tmpQuat.Z, idx / 3.0f);
 
                                                     uint ts = 0;
@@ -2996,7 +3004,7 @@ namespace MeshSetPlugin
                                             {
                                                 if (vertex.HasValue("Color0"))
                                                 {
-                                                    ColorBGRA color = vertex.GetValue<ColorBGRA>("Color0");
+                                                    ColorBgra color = vertex.GetValue<ColorBgra>("Color0");
                                                     chunkWriter.Write(color.R);
                                                     chunkWriter.Write(color.G);
                                                     chunkWriter.Write(color.B);
@@ -3011,7 +3019,7 @@ namespace MeshSetPlugin
                                             {
                                                 if (vertex.HasValue("Color1"))
                                                 {
-                                                    ColorBGRA color = vertex.GetValue<ColorBGRA>("Color0");
+                                                    ColorBgra color = vertex.GetValue<ColorBgra>("Color0");
                                                     chunkWriter.Write(color.R);
                                                     chunkWriter.Write(color.G);
                                                     chunkWriter.Write(color.B);
@@ -3042,7 +3050,7 @@ namespace MeshSetPlugin
                                             {
                                                 if (vertex.HasValue("Delta"))
                                                 {
-                                                    ColorBGRA color = vertex.GetValue<ColorBGRA>("Delta");
+                                                    ColorBgra color = vertex.GetValue<ColorBgra>("Delta");
                                                     chunkWriter.Write(HalfUtils.Pack(color.R * 255.0f));
                                                     chunkWriter.Write(HalfUtils.Pack(color.G * 255.0f));
                                                     chunkWriter.Write(HalfUtils.Pack(color.B * 255.0f));
@@ -3167,17 +3175,17 @@ namespace MeshSetPlugin
 
         private (AxisAlignedBox, BoundingBox) AABBFromPoints(List<Vector3> points)
         {
-            BoundingBox bbox = BoundingBox.FromPoints(points.ToArray());
+            BoundingBox bbox = BoundingBox.CreateFromPoints(points.ToArray());
 
             Vec3 min = new Vec3();
-            min.x = bbox.Minimum.X;
-            min.y = bbox.Minimum.Y;
-            min.z = bbox.Minimum.Z;
+            min.x = bbox.Min.X;
+            min.y = bbox.Min.Y;
+            min.z = bbox.Min.Z;
 
             Vec3 max = new Vec3();
-            max.x = bbox.Maximum.X;
-            max.y = bbox.Maximum.Y;
-            max.z = bbox.Maximum.Z;
+            max.x = bbox.Max.X;
+            max.y = bbox.Max.Y;
+            max.z = bbox.Max.Z;
 
             AxisAlignedBox aabb = new AxisAlignedBox();
             aabb.min = min;
@@ -3572,7 +3580,7 @@ namespace MeshSetPlugin
                     lightEntity = previewSettings.PreviewLights[idx];
                 }
 
-                Matrix transform = SharpDXUtils.FromLinearTransform(lightEntity.Transform);
+                Matrix4x4 transform = SharpDXUtils.FromLinearTransform(lightEntity.Transform);
                 Vector3 color = SharpDXUtils.FromVec3(lightEntity.Color);
 
                 if (lightEntity.LightId == -1)
@@ -3635,10 +3643,10 @@ namespace MeshSetPlugin
 
                         ulong resRid = ((dynamic)meshData.Asset.RootObject).MeshSetResource;
                         MeshSet previewMeshSet = App.AssetManager.GetResAs<MeshSet>(App.AssetManager.GetResEntry(resRid));
-                        Matrix transform = SharpDXUtils.FromLinearTransform(meshData.Transform);
+                        Matrix4x4 transform = SharpDXUtils.FromLinearTransform(meshData.Transform);
 
                         // add to renderer
-                        meshData.MeshId = screen.AddMesh(previewMeshSet, new MeshMaterialCollection(meshData.Asset, meshData.Variation), /*Matrix.Scaling(1, 1, -1) **/ transform, LoadPose(ebxEntry.Filename, meshData.Asset));
+                        meshData.MeshId = screen.AddMesh(previewMeshSet, new MeshMaterialCollection(meshData.Asset, meshData.Variation), /*Matrix.CreateScale(1, 1, -1) **/ transform, LoadPose(ebxEntry.Filename, meshData.Asset));
                     }
                 }
                 else if (e.Item.Name == "Variation")
@@ -3652,8 +3660,8 @@ namespace MeshSetPlugin
                     // change transform
                     if (meshData.MeshId != -1)
                     {
-                        Matrix transform = SharpDXUtils.FromLinearTransform(meshData.Transform);
-                        screen.SetTransform(meshData.MeshId, /*Matrix.Scaling(1, 1, -1) **/ transform);
+                        Matrix4x4 transform = SharpDXUtils.FromLinearTransform(meshData.Transform);
+                        screen.SetTransform(meshData.MeshId, /*Matrix.CreateScale(1, 1, -1) **/ transform);
                     }
                 }
             }
@@ -3803,7 +3811,7 @@ namespace MeshSetPlugin
                 UpdateMeshSettings();
 
                 pgPreviewSettings.SetClass(previewSettings);
-                screen.AddMesh(meshSet, GetVariation(selectedPreviewIndex), Matrix.Identity /*Matrix.Scaling(1,1,-1)*/, LoadPose(AssetEntry.Filename, asset));
+                screen.AddMesh(meshSet, GetVariation(selectedPreviewIndex), Matrix4x4.Identity /*Matrix.CreateScale(1,1,-1)*/, LoadPose(AssetEntry.Filename, asset));
 
                 if (ProfilesLibrary.DataVersion == (int)ProfileVersion.StarWarsBattlefrontII)
                 {
@@ -4056,16 +4064,16 @@ namespace MeshSetPlugin
                             boneName = Murmur2.HashString64(boneName, 0x4eb23).ToString("X16");
 
                         boneName = boneName.ToLower();
-                        Matrix boneMatrix = SharpDXUtils.FromLinearTransform(localPose[boneIdx]);
+                        Matrix4x4 boneMatrix = SharpDXUtils.FromLinearTransform(localPose[boneIdx]);
 
                         if (facePose.ContainsKey(boneName))
                         {
                             Vector3 scale = Vector3.One;
-                            Vector3 trans = boneMatrix.TranslationVector;
-                            Quaternion rot = Quaternion.RotationMatrix(boneMatrix);
+                            Vector3 trans = boneMatrix.Translation;
+                            Quaternion rot = Quaternion.CreateFromRotationMatrix(boneMatrix);
                             Vector3 euler = Vector3.Zero;
 
-                            boneMatrix.Decompose(out scale, out rot, out trans);
+                            Matrix4x4.Decompose(boneMatrix, out scale, out rot, out trans);
                             euler = SharpDXUtils.ExtractEulerAngles(boneMatrix);
 
                             if (facePose[boneName].Item1.X < float.MaxValue)
@@ -4075,11 +4083,11 @@ namespace MeshSetPlugin
                             if (facePose[boneName].Item3.W < float.MaxValue)
                                 rot = facePose[boneName].Item3;
 
-                            boneMatrix = Matrix.Scaling(scale) * Matrix.RotationQuaternion(rot) * Matrix.Translation(trans);
+                            boneMatrix = Matrix4x4.CreateScale(scale) * Matrix4x4.CreateFromQuaternion(rot) * Matrix4x4.CreateTranslation(trans);
                         }
 
-                        Matrix mp = SharpDXUtils.FromLinearTransform(pose[boneIdx]);
-                        mp.Invert();
+                        Matrix4x4 mp = SharpDXUtils.FromLinearTransform(pose[boneIdx]);
+                        Matrix4x4.Invert(mp, out mp);
 
                         boneName = boneNames[boneIdx];
                         boneName = boneName.ToLower();
@@ -4102,9 +4110,9 @@ namespace MeshSetPlugin
                             // SWBF2 procedural animation bones
                             foreach (dynamic bone in ((dynamic)meshAsset.RootObject).SkinnedProceduralAnimation.Bones)
                             {
-                                Matrix mp = SharpDXUtils.FromLinearTransform(bone.LocalPose);
-                                Matrix boneMatrix = SharpDXUtils.FromLinearTransform(bone.Pose);
-                                mp.Invert();
+                                Matrix4x4 mp = SharpDXUtils.FromLinearTransform(bone.LocalPose);
+                                Matrix4x4 boneMatrix = SharpDXUtils.FromLinearTransform(bone.Pose);
+                                Matrix4x4.Invert(mp, out mp);
 
                                 skeleton.AddBone(new MeshRenderSkeleton.Bone()
                                 {
@@ -4119,8 +4127,8 @@ namespace MeshSetPlugin
                             foreach (dynamic rootPose in ((dynamic)meshAsset.RootObject).SkinnedProceduralAnimation.RootPoses)
                             {
                                 int index = rootPose.Index;
-                                Matrix mp = SharpDXUtils.FromLinearTransform(rootPose.LocalPose);
-                                mp.Invert();
+                                Matrix4x4 mp = SharpDXUtils.FromLinearTransform(rootPose.LocalPose);
+                                Matrix4x4.Invert(mp, out mp);
 
                                 skeleton.UpdateBone(index, modelPose: mp);
                             }
@@ -4454,7 +4462,7 @@ namespace MeshSetPlugin
 
                     // update UI
                     screen.ClearMeshes(clearAll: true);
-                    screen.AddMesh(meshSet, GetVariation(selectedPreviewIndex), Matrix.Identity /*Matrix.Scaling(1,1,-1)*/, LoadPose(AssetEntry.Filename, asset));
+                    screen.AddMesh(meshSet, GetVariation(selectedPreviewIndex), Matrix4x4.Identity /*Matrix.CreateScale(1,1,-1)*/, LoadPose(AssetEntry.Filename, asset));
 
                     UpdateMeshSettings();
                     UpdateControls();

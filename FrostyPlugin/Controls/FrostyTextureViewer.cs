@@ -5,7 +5,7 @@ using FrostySdk.Resources;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using D3D11 = SharpDX.Direct3D11;
+using D3D11 = Vortice.Direct3D11;
 
 namespace Frosty.Core.Controls
 {
@@ -334,39 +334,39 @@ namespace Frosty.Core.Controls
             // All others
             else if (header.HasExtendedHeader)
             {
-                if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.BC1_UNorm)
+                if (header.ExtendedHeader.dxgiFormat == Vortice.DXGI.Format.BC1_UNorm)
                     pixelFormat = "BC1_UNORM";
-                else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.BC3_UNorm)
+                else if (header.ExtendedHeader.dxgiFormat == Vortice.DXGI.Format.BC3_UNorm)
                     pixelFormat = "BC3_UNORM";
-                else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.BC4_UNorm)
+                else if (header.ExtendedHeader.dxgiFormat == Vortice.DXGI.Format.BC4_UNorm)
                     pixelFormat = "BC4_UNORM";
-                else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.BC5_UNorm)
+                else if (header.ExtendedHeader.dxgiFormat == Vortice.DXGI.Format.BC5_UNorm)
                     pixelFormat = "BC5_UNORM";
-                else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.BC1_UNorm_SRgb && textureAsset.PixelFormat == "BC1A_SRGB")
+                else if (header.ExtendedHeader.dxgiFormat == Vortice.DXGI.Format.BC1_UNorm_SRgb && textureAsset.PixelFormat == "BC1A_SRGB")
                     pixelFormat = "BC1A_SRGB";
-                else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.BC1_UNorm_SRgb)
+                else if (header.ExtendedHeader.dxgiFormat == Vortice.DXGI.Format.BC1_UNorm_SRgb)
                     pixelFormat = "BC1_SRGB";
-                else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.BC3_UNorm_SRgb)
+                else if (header.ExtendedHeader.dxgiFormat == Vortice.DXGI.Format.BC3_UNorm_SRgb)
                     pixelFormat = "BC3_SRGB";
-                else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.BC6H_Uf16)
+                else if (header.ExtendedHeader.dxgiFormat == Vortice.DXGI.Format.BC6H_Uf16)
                     pixelFormat = "BC6U_FLOAT";
-                else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.BC7_UNorm)
+                else if (header.ExtendedHeader.dxgiFormat == Vortice.DXGI.Format.BC7_UNorm)
                     pixelFormat = "BC7_UNORM";
-                else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.BC7_UNorm_SRgb)
+                else if (header.ExtendedHeader.dxgiFormat == Vortice.DXGI.Format.BC7_UNorm_SRgb)
                     pixelFormat = "BC7_SRGB";
-                else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.R8_UNorm)
+                else if (header.ExtendedHeader.dxgiFormat == Vortice.DXGI.Format.R8_UNorm)
                     pixelFormat = "R8_UNORM";
-                else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.R16G16B16A16_Float)
+                else if (header.ExtendedHeader.dxgiFormat == Vortice.DXGI.Format.R16G16B16A16_Float)
                     pixelFormat = "R16G16B16A16_FLOAT";
-                else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.R32G32B32A32_Float)
+                else if (header.ExtendedHeader.dxgiFormat == Vortice.DXGI.Format.R32G32B32A32_Float)
                     pixelFormat = "R32G32B32A32_FLOAT";
-                else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.R9G9B9E5_Sharedexp)
+                else if (header.ExtendedHeader.dxgiFormat == Vortice.DXGI.Format.R9G9B9E5_SharedExp)
                     pixelFormat = "R9G9B9E5_FLOAT";
-                else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.R8G8B8A8_UNorm)
+                else if (header.ExtendedHeader.dxgiFormat == Vortice.DXGI.Format.R8G8B8A8_UNorm)
                     pixelFormat = "R8G8B8A8_UNORM";
-                else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.R8G8B8A8_UNorm_SRgb)
+                else if (header.ExtendedHeader.dxgiFormat == Vortice.DXGI.Format.R8G8B8A8_UNorm_SRgb)
                     pixelFormat = "R8G8B8A8_SRGB";
-                else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.R10G10B10A2_UNorm)
+                else if (header.ExtendedHeader.dxgiFormat == Vortice.DXGI.Format.R10G10B10A2_UNorm)
                     pixelFormat = "R10G10B10A2_UNORM";
             }
         }

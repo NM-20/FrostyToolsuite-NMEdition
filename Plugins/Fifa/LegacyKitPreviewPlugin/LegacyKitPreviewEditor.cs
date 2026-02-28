@@ -8,7 +8,6 @@ using FrostySdk.Ebx;
 using FrostySdk.Interfaces;
 using FrostySdk.IO;
 using FrostySdk.Managers;
-using SharpDX;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,6 +24,7 @@ using ImageSource = System.Windows.Media.ImageSource;
 using MeshSetPlugin.Screens;
 using MeshSetPlugin.Render;
 using MeshSetPlugin.Resources;
+using System.Numerics;
 
 namespace LegacyKitPreviewPlugin
 {
@@ -209,7 +209,7 @@ namespace LegacyKitPreviewPlugin
             foreach (string meshPath in meshPaths)
             {
                 meshes.Add(LoadMesh(meshPath, info.IsFemale ? 1 : 0));
-                renderMeshes.Add(screen.AddMesh(meshes[meshes.Count - 1].Item2, meshes[meshes.Count - 1].Item3, Matrix.Identity, LoadSkeleton("content/character/rig/skeleton/player/skeleton_player")));
+                renderMeshes.Add(screen.AddMesh(meshes[meshes.Count - 1].Item2, meshes[meshes.Count - 1].Item3, Matrix4x4.Identity, LoadSkeleton("content/character/rig/skeleton/player/skeleton_player")));
             }
 
             screen.SetAnimation(LoadAnim("Resources\\FifaKitPreviewStance.dat"));
@@ -340,10 +340,10 @@ namespace LegacyKitPreviewPlugin
                     boneName = Murmur2.HashString64(boneName, 0x4eb23).ToString("X16");
 
                 boneName = boneName.ToLower();
-                Matrix boneMatrix = SharpDXUtils.FromLinearTransform(localPose[boneIdx]);
+                Matrix4x4 boneMatrix = SharpDXUtils.FromLinearTransform(localPose[boneIdx]);
 
-                Matrix mp = SharpDXUtils.FromLinearTransform(pose[boneIdx]);
-                mp.Invert();
+                Matrix4x4 mp = SharpDXUtils.FromLinearTransform(pose[boneIdx]);
+                Matrix4x4.Invert(mp, out mp);
 
                 boneName = boneNames[boneIdx];
                 boneName = boneName.ToLower();

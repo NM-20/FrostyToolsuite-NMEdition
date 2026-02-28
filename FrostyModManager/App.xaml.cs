@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Loader;
 using System.Text;
 using System.Windows;
 
@@ -83,25 +84,27 @@ namespace FrostyModManager
             Environment.Exit(0);
         }
 
-        private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            string dllname = args.Name.Contains(",") ? args.Name.Substring(0, args.Name.IndexOf(',')) : args.Name;
-            if (dllname.StartsWith("SharpDX") || dllname.StartsWith("Newtonsoft"))
+            ReadOnlySpan<char> dllName = args.Name;
+            int commaIndex = dllName.IndexOf(',');
+            if (commaIndex is not -1)
+                dllName = dllName.Slice(0, commaIndex);
+
+            FileInfo fileInfo = new(typeof(App).Assembly.FullName);
+
+            if (dllName is "EbxClasses")
             {
-                FileInfo fi = new FileInfo(Assembly.GetExecutingAssembly().FullName);
-                return Assembly.LoadFile(fi.DirectoryName + "/ThirdParty/" + dllname + ".dll");
-            }
-            else if (dllname.Equals("EbxClasses"))
-            {
-                FileInfo fi = new FileInfo(Assembly.GetExecutingAssembly().FullName);
-                return Assembly.LoadFile(fi.DirectoryName + "/Profiles/" + ProfilesLibrary.SDKFilename + ".dll");
-            }
-            else if (PluginManager != null)
-            {
-                return PluginManager.GetPluginAssembly(dllname);
+                return AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(
+                    fileInfo.DirectoryName, $"Profiles/{ProfilesLibrary.SDKFilename}.dll"));
             }
 
-            return null;
+            /* Otherwise, check if we've got an existing assembly within the ThirdParty directory. */
+            string thirdPartyPath = Path.Combine(fileInfo.DirectoryName, $"ThirdParty/{dllName}.dll");
+            if (!File.Exists(thirdPartyPath))
+                return null;
+            else
+                return AssemblyLoadContext.Default.LoadFromAssemblyPath(thirdPartyPath);
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)

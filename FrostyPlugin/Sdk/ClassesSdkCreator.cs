@@ -2,9 +2,13 @@
 using Frosty.Core.Windows;
 using FrostySdk;
 using FrostySdk.Attributes;
+using FrostySdk.BaseProfile;
 using FrostySdk.Ebx;
 using FrostySdk.IO;
 using FrostySdk.Managers;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CSharp;
 using System;
 using System.CodeDom.Compiler;
@@ -329,32 +333,49 @@ namespace Frosty.Core.Sdk
             }
             sb.AppendLine("}");
 
-            using (NativeWriter writer = new NativeWriter(new FileStream("temp.cs", FileMode.Create)))
-                writer.WriteLine(sb.ToString());
+            /* We'll need to gather the required assemblies first: FrostySdk, mscorlib, System, System.Core, System.Runtime. */
+            const int ASSEMBLIES_COUNT = 5;
+            List<MetadataReference> references = new(ASSEMBLIES_COUNT);
+            references.Add(MetadataReference.CreateFromFile(typeof(BaseBinarySbReader).Assembly.Location));
 
-            CSharpCodeProvider provider = new CSharpCodeProvider();
+            /* For the System assemblies, they have no publicly accessible types, so we'll have to fetch them in a different
+             * manner. 
+             */
+            string systemAssembliesPath = Path.GetDirectoryName(typeof(AccessViolationException).Assembly.Location);
 
-            CompilerParameters compilerParams = new CompilerParameters
-            {
-                GenerateExecutable = false,
-                OutputAssembly = filename,
-                CompilerOptions = "-define:DV_" + (int)ProfilesLibrary.DataVersion
-            };
+            references.Add(MetadataReference.CreateFromFile(Path.Combine(systemAssembliesPath, "mscorlib.dll")));
+            references.Add(MetadataReference.CreateFromFile(Path.Combine(systemAssembliesPath, "System.dll")));
+            references.Add(MetadataReference.CreateFromFile(Path.Combine(systemAssembliesPath, "System.Core.dll")));
+            references.Add(MetadataReference.CreateFromFile(Path.Combine(systemAssembliesPath, "System.Private.CoreLib.dll")));
+            references.Add(MetadataReference.CreateFromFile(Path.Combine(systemAssembliesPath, "System.Runtime.dll")));
 
-            compilerParams.ReferencedAssemblies.Add("mscorlib.dll");
-            compilerParams.ReferencedAssemblies.Add("FrostySdk.dll");
+            SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(sb.ToString(), new CSharpParseOptions().WithPreprocessorSymbols($"DV_{ProfilesLibrary.DataVersion}"));
 
-            CompilerResults results = provider.CompileAssemblyFromFile(compilerParams, "temp.cs");
+            CSharpCompilation compilation = CSharpCompilation.Create(Path.GetFileNameWithoutExtension(filename))
+                .AddSyntaxTrees(syntaxTree)
+                .AddReferences(references)
+                .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+            /* Emit the compiled assembly to a stream first, since Roslyn writes out a file regardless of compilation success. */
+            using MemoryStream memoryStream = new();
+
+            EmitResult results = compilation.Emit(memoryStream);
             File.Delete("temp.cs");
 
+            if (results.Success)
+            {
+                using FileStream fileStream = new(filename, FileMode.Create, FileAccess.Write, FileShare.None);
+                memoryStream.Position = 0;
+                memoryStream.CopyTo(fileStream);
+            }
 #if FROSTY_ALPHA || FROSTY_DEVELOPER
-            if (results.Errors.Count > 0)
+            else
             {
                 using (NativeWriter writer = new NativeWriter(new FileStream("Errors.txt", FileMode.Create)))
                 {
-                    foreach (CompilerError error in results.Errors)
+                    foreach (Diagnostic error in results.Diagnostics)
                     {
-                        writer.WriteLine("[Line: " + error.Line + "]: " + error.ErrorText);
+                        writer.WriteLine($"[Line: {error.Location.GetLineSpan().StartLinePosition}]: {error.GetMessage()}");
                     }
                 }
             }

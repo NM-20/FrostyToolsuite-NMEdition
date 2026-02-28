@@ -52,6 +52,8 @@ namespace FrostySdk.BaseProfile
                 containsSha1 = false;
             else if (magic == 0xC3E5D5C3)
             {
+                var decryptedBuffer = new byte[buffer.Length];
+
                 containsSha1 = false;
                 byte[] key = KeyManager.Instance.GetKey("Key2");
 
@@ -65,9 +67,11 @@ namespace FrostySdk.BaseProfile
                     using (MemoryStream decryptStream = new MemoryStream(buffer))
                     {
                         using (CryptoStream cryptoStream = new CryptoStream(decryptStream, decryptor, CryptoStreamMode.Read))
-                            cryptoStream.Read(buffer, 0, buffer.Length);
+                            cryptoStream.Read(decryptedBuffer, 0, decryptedBuffer.Length);
                     }
                 }
+
+                buffer = decryptedBuffer;
             }
 
             DbObject bundle = new DbObject(new Dictionary<string, object>());

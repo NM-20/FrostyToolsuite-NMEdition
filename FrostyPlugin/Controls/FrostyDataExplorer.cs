@@ -641,10 +641,13 @@ namespace Frosty.Core.Controls
 
             if(!assetPathMapping.ContainsKey("/"))
                 assetPathMapping.Add("/", new AssetPath("![root]", "", null, true));           
+
+            /* Sort first, then insert root element. */
+            root.Children.Sort((AssetPath x, AssetPath y) => x.PathName.CompareTo(y.PathName, StringComparison.InvariantCultureIgnoreCase));
+
             root.Children.Insert(0, assetPathMapping["/"]);
 
             assetTreeView.ItemsSource = root.Children;
-            assetTreeView.Items.SortDescriptions.Add(new SortDescription("PathName", ListSortDirection.Ascending));
 
             UpdateListView(selectedPath);
         }

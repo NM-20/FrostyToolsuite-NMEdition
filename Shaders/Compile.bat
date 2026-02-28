@@ -1,3 +1,5 @@
+mkdir .\Bin
+
 fxc TextureEditor.hlsl /Tvs_5_0 /EVS_Main /Fo.\Bin\Texture.vso
 fxc TextureEditor.hlsl /Tps_5_0 /EPS_Main /Fo.\Bin\Texture.pso
 fxc SoundWaveEditor.hlsl /Tvs_5_0 /EVS_Main /Fo.\Bin\SoundWave.vso
@@ -112,5 +114,5 @@ fxc UnpackNormals.hlsl /Tcs_5_0 /ECS_UnpackAxisAngle /Fo.\Bin\UnpackAxisAngle.vs
 fxc UnpackNormals.hlsl /Tcs_5_0 /ECS_UnpackQuaternion /Fo.\Bin\UnpackQuaternion.vso
 
 cd ..\FrostyEditor\bin\Developer\Debug
-FrostyCmd.exe "D:\OriginLibrary\originapps\Mass Effect Andromeda\MassEffectAndromeda.exe" shader
+REM FrostyCmd.exe "D:\OriginLibrary\originapps\Mass Effect Andromeda\MassEffectAndromeda.exe" shader
 copy ..\..\..\Shaders.bin .\Shaders.bin
