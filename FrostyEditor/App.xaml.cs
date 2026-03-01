@@ -168,7 +168,7 @@ namespace FrostyEditor
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            if (!File.Exists($"{Frosty.Core.App.GlobalSettingsPath}/editor_config.json"))
+            if (!File.Exists($"{Frosty.Core.App.GlobalSettingsPath}/Config.json"))
                 Config.UpgradeConfigs();
 
             Config.Load();
