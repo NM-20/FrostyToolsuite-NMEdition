@@ -90,7 +90,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\FrostyControls\FrostyControls.csproj" />
-    <ProjectReference Include="..\..\FrostyHash\FrostyHash.vcxproj" />
+    <ProjectReference Include="..\..\FrostyHash\FrostyHash.csproj" />
     <ProjectReference Include="..\..\FrostyModSupport\FrostyModSupport.csproj" />
     <ProjectReference Include="..\..\FrostyPlugin\FrostyCore.csproj" />
     <ProjectReference Include="..\..\FrostySdk\FrostySdk.csproj" />

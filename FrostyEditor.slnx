@@ -188,8 +188,15 @@
     <BuildType Solution="Release|*" Project="Release - Final" />
     <Platform Project="x64" />
   </Project>
-  <Project Path="FrostyHash/FrostyHash.vcxproj" Id="d1a29bf8-2e2e-47be-845f-a6dd66d175ba">
+  <Project Path="FrostyHash/FrostyHash.csproj">
+    <BuildType Solution="Release - Alpha|*" Project="Release - Final" />
+    <BuildType Solution="Release - Beta|*" Project="Release - Final" />
     <BuildType Solution="Release|*" Project="Release - Final" />
+    <Platform Project="x64" />
+    <Build Solution="Release - Alpha|*" Project="false" />
+    <Build Solution="Release - Beta|*" Project="false" />
+    <Build Solution="Release - Final|*" Project="false" />
+    <Build Solution="Release|*" Project="false" />
   </Project>
   <Project Path="FrostyModManager/FrostyModManager.csproj">
     <BuildDependency Project="Plugins/BiowareLocalizationPlugin/BiowareLocalizationPlugin.csproj" />
