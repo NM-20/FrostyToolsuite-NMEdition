@@ -1,7 +1,6 @@
 <Solution>
   <Configurations>
     <BuildType Name="Developer - Debug" />
-    <BuildType Name="Release" />
     <BuildType Name="Release - Alpha" />
     <BuildType Name="Release - Beta" />
     <BuildType Name="Release - Final" />
@@ -9,146 +8,111 @@
   </Configurations>
   <Folder Name="/Plugins/">
     <Project Path="Plugins/AtlasTexturePlugin/AtlasTexturePlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/BiowareLocalizationPlugin/BiowareLocalizationPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/BlankPlugin/BlankPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/BundleEditorPlugin/BundleEditorPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Alpha" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/ChunkResExplorerPlugin/ChunkResEditorPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/ConnectionPlugin/ConnectionPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/ConversationPlugin/ConversationPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/DelayLoadBundlePlugin/DelayLoadBundlePlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/DifficultyWeaponTableDataPlugin/DifficultyWeaponTableDataPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Alpha" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/DuplicationPlugin/DuplicationPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Alpha" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/EbxToXmlPlugin/EbxToXmlPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/FsLocalizationPlugin/FsLocalizationPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/IesResourcePlugin/IesResourcePlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/LaunchPlatformPlugin/LaunchPlatformPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Alpha" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/LocalizedStringPlugin/LocalizedStringPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/LuaPlugin/LuaPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/MeshSetPlugin/MeshSetPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/ObjectVariationPlugin/ObjectVariationPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/ReferencesPlugin/ReferencesPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Alpha" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/RefreshMeshVariationsPlugin/RefreshMeshVariationsPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/RootInstanceEntriesPlugin/RootInstanceEntriesPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Alpha" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/SoundEditorPlugin/SoundEditorPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/SvgImagePlugin/SvgImagePlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/TestPlugin/TestPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/TexturePlugin/TexturePlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/TypeExplorerPlugin/TypeExplorerPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/VersionDataPlugin/VersionDataPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
   </Folder>
   <Folder Name="/Plugins/Fifa/">
     <Project Path="Plugins/Fifa/LegacyBigFilePlugin/LegacyBigFilePlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/Fifa/LegacyDatabasePlugin/LegacyDatabasePlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/Fifa/LegacyDdsPlugin/LegacyDdsPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/Fifa/LegacyKitPreviewPlugin/LegacyKitPreviewPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/Fifa/LegacyLocalizedStringsPlugin/LegacyLocalizedStringsPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
     <Project Path="Plugins/Fifa/LegacyTextPlugin/LegacyTextPlugin.csproj">
-      <BuildType Solution="Release|*" Project="Release - Final" />
       <Platform Project="x64" />
     </Project>
   </Folder>
   <Project Path="FrostyCmd/FrostyCmd.csproj">
-    <BuildType Solution="Release|*" Project="Release - Final" />
     <Platform Project="x64" />
   </Project>
   <Project Path="FrostyControls/FrostyControls.csproj">
-    <BuildType Solution="Release|*" Project="Release - Final" />
     <Platform Project="x64" />
   </Project>
   <Project Path="FrostyEditor/FrostyEditor.csproj">
@@ -185,11 +149,9 @@
     <BuildDependency Project="Plugins/TexturePlugin/TexturePlugin.csproj" />
     <BuildDependency Project="Plugins/TypeExplorerPlugin/TypeExplorerPlugin.csproj" />
     <BuildDependency Project="Plugins/VersionDataPlugin/VersionDataPlugin.csproj" />
-    <BuildType Solution="Release|*" Project="Release - Final" />
     <Platform Project="x64" />
   </Project>
   <Project Path="FrostyHash/FrostyHash.csproj">
-    <BuildType Solution="Release|*" Project="Release - Final" />
     <Platform Project="x64" />
   </Project>
   <Project Path="FrostyModManager/FrostyModManager.csproj">
@@ -197,19 +159,15 @@
     <BuildDependency Project="Plugins/DifficultyWeaponTableDataPlugin/DifficultyWeaponTableDataPlugin.csproj" />
     <BuildDependency Project="Plugins/FsLocalizationPlugin/FsLocalizationPlugin.csproj" />
     <BuildDependency Project="Plugins/MeshSetPlugin/MeshSetPlugin.csproj" />
-    <BuildType Solution="Release|*" Project="Release - Final" />
     <Platform Project="x64" />
   </Project>
   <Project Path="FrostyModSupport/FrostyModSupport.csproj">
-    <BuildType Solution="Release|*" Project="Release - Final" />
     <Platform Project="x64" />
   </Project>
   <Project Path="FrostyPlugin/FrostyCore.csproj">
-    <BuildType Solution="Release|*" Project="Release - Final" />
     <Platform Project="x64" />
   </Project>
   <Project Path="FrostySdk/FrostySdk.csproj">
-    <BuildType Solution="Release|*" Project="Release - Final" />
     <Platform Project="x64" />
   </Project>
   <Project Path="Shaders/FrostyShaders.vcxproj" Id="cb97b27b-6604-43ce-97aa-8b349617928e">
