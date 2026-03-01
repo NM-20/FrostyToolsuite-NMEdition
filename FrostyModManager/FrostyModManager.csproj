@@ -103,10 +103,7 @@
       <Project>{51d3305b-48d0-4d4c-9d64-727185420eac}</Project>
       <Name>FrostyControls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FrostyHash\FrostyHash.vcxproj">
-      <Project>{d1a29bf8-2e2e-47be-845f-a6dd66d175ba}</Project>
-      <Name>FrostyHash</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\FrostyHash\FrostyHash.csproj" />
     <ProjectReference Include="..\FrostyModSupport\FrostyModSupport.csproj">
       <Project>{e703b059-36f3-4ebf-8f86-32561bc47dcb}</Project>
       <Name>FrostyModSupport</Name>

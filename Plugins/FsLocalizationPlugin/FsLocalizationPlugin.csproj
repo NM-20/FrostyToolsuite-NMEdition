@@ -39,7 +39,7 @@
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>
-      <PluginFiles Include="$(TargetDir)$(ProjectName).*"/>
+      <PluginFiles Include="$(TargetDir)$(ProjectName).*" />
     </ItemGroup>
     
     <Copy SourceFiles="@(PluginFiles)" DestinationFolder="$(SolutionDir)FrostyEditor\$(OutDir)Plugins\" />
@@ -56,9 +56,7 @@
     <ProjectReference Include="..\..\FrostyControls\FrostyControls.csproj">
       <Private>false</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\FrostyHash\FrostyHash.vcxproj">
-      <Private>false</Private>
-    </ProjectReference>
+    <ProjectReference Include="..\..\FrostyHash\FrostyHash.csproj" />
     <ProjectReference Include="..\..\FrostyPlugin\FrostyCore.csproj">
       <Private>false</Private>
     </ProjectReference>
