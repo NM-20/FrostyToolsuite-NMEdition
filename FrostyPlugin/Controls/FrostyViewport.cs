@@ -171,7 +171,7 @@ namespace Frosty.Core.Controls
             catch (OperationCanceledException)
             {
                 // dispose of any buffers that are dependent on viewport
-                DisposeBuffers();
+                DisposeSizeDependentBuffers();
             }
         }
 
