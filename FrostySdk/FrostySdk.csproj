@@ -73,8 +73,8 @@
   </ItemDefinitionGroup>
     
   <ItemGroup>
-    <PackageReference Include="MessagePack" Version="3.1.4" />
-    <PackageReference Include="MessagePack.Annotations" Version="3.1.4" />
+    <PackageReference Include="MessagePack" Version="3.1.8" />
+    <PackageReference Include="MessagePack.Annotations" Version="3.1.8" />
   </ItemGroup>
     
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
