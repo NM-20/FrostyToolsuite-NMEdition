@@ -2,11 +2,14 @@
 using Frosty.Core.Controls;
 using Frosty.Core.Legacy;
 using Frosty.Core.Windows;
+
 using FrostySdk.Interfaces;
 using FrostySdk.Managers;
+
 using LegacyDatabasePlugin.Converters;
 using LegacyDatabasePlugin.Database;
 using LegacyDatabasePlugin.IO;
+
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
@@ -14,130 +17,113 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 
-namespace LegacyDatabasePlugin
-{
-    [TemplatePart(Name = PART_TableView, Type = typeof(ListView))]
-    [TemplatePart(Name = PART_TableList, Type = typeof(ListBox))]
-    public class LegacyDbEditor : FrostyAssetEditor
-    {
-        private const string PART_TableView = "PART_TableView";
-        private const string PART_TableList = "PART_TableList";
+namespace LegacyDatabasePlugin;
 
-        private const int MinColumnWidth = 50;
-        private const int MaxColumnWidth = 400;
+[TemplatePart(Name = PART_TableView, Type = typeof(ListView))]
+[TemplatePart(Name = PART_TableList, Type = typeof(ListBox))]
+public class LegacyDbEditor : FrostyAssetEditor {
+  private const string PART_TableView = "PART_TableView";
+  private const string PART_TableList = "PART_TableList";
 
-        private ListView tableView;
-        private ListBox tableList;
+  private const int MinColumnWidth = 50;
+  private const int MaxColumnWidth = 400;
 
-        private LegacyDb database;
-        private int currentTableIndex;
-        private bool firstTimeLoad = true;
+  private ListView tableView;
+  private ListBox tableList;
 
-        static LegacyDbEditor()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(LegacyDbEditor), new FrameworkPropertyMetadata(typeof(LegacyDbEditor)));
-        }
+  private LegacyDb database;
+  private int currentTableIndex;
+  private bool firstTimeLoad = true;
 
-        public LegacyDbEditor(ILogger inLogger)
-            : base(inLogger)
-        {
-        }
+  static LegacyDbEditor() {
+    DefaultStyleKeyProperty.OverrideMetadata(typeof(LegacyDbEditor), new FrameworkPropertyMetadata(typeof(LegacyDbEditor)));
+  }
 
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
+  public LegacyDbEditor(ILogger inLogger)
+      : base(inLogger) {
+  }
 
-            tableView = GetTemplateChild(PART_TableView) as ListView;
-            tableList = GetTemplateChild(PART_TableList) as ListBox;
+  public override void OnApplyTemplate() {
+    base.OnApplyTemplate();
 
-            Loaded += LegacyDbEditor_Loaded;
-            tableList.SelectionChanged += TableList_SelectionChanged;
-            tableView.AddHandler(Thumb.DragDeltaEvent, new DragDeltaEventHandler(Thumb_DragDelta), true);
-        }
+    tableView = GetTemplateChild(PART_TableView) as ListView;
+    tableList = GetTemplateChild(PART_TableList) as ListBox;
 
-        public override List<ToolbarItem> RegisterToolbarItems()
-        {
-            return new List<ToolbarItem>();
-        }
+    Loaded += LegacyDbEditor_Loaded;
+    tableList.SelectionChanged += TableList_SelectionChanged;
+    tableView.AddHandler(Thumb.DragDeltaEvent, new DragDeltaEventHandler(Thumb_DragDelta), true);
+  }
 
-        private void TableList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            LegacyDbTable table = tableList.SelectedItem as LegacyDbTable;
-            if (table == null)
-                return;
+  public override List<ToolbarItem> RegisterToolbarItems() {
+    return new List<ToolbarItem>();
+  }
 
-            currentTableIndex = tableList.SelectedIndex;
-            tableView.ItemsSource = null;
+  private void TableList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+    LegacyDbTable table = tableList.SelectedItem as LegacyDbTable;
+    if (table == null)
+      return;
 
-            GridView gridView = tableView.View as GridView;
-            gridView.Columns.Clear();
+    currentTableIndex = tableList.SelectedIndex;
+    tableView.ItemsSource = null;
 
-            foreach (LegacyDbColumn column in table.Columns)
-            {
-                GridViewColumn gvColumn = new GridViewColumn()
-                {
-                    HeaderTemplate = Template.Resources["gvColumnTemplate"] as DataTemplate,
-                    Header = column,
-                };
-                Binding b = new Binding(".")
-                {
-                    Converter = new ColumnRowConverter(),
-                    ConverterParameter = column.Name
-                };
-                gvColumn.DisplayMemberBinding = b;
-                gridView.Columns.Add(gvColumn);
-            }
+    GridView gridView = tableView.View as GridView;
+    gridView.Columns.Clear();
 
-            tableView.ItemsSource = table.Rows;
-        }
-
-        private void LegacyDbEditor_Loaded(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (firstTimeLoad)
-            {
-                AssetEntry entry = AssetEntry;
-                FrostyTaskWindow.Show("Loading Database", "", (task) =>
-                {
-                    string metaName = entry.Name.Replace(".db", "-meta.xml");
-                    LegacyFileEntry metaEntry = App.AssetManager.GetCustomAssetEntry<LegacyFileEntry>("legacy", metaName);
-                    Stream metaStream = null;
-
-                    if (metaEntry == null)
-                    {
-                        string filename = "Resources/Meta/" + entry.Filename + "-meta.xml";
-                        if (File.Exists(filename))
-                            metaStream = new FileStream(filename, FileMode.Open, FileAccess.Read);
-                    }
-                    else
-                    {
-                        metaStream = App.AssetManager.GetCustomAsset("legacy", metaEntry);
-                    }
-
-                    using (LegacyDbReader reader = new LegacyDbReader(metaStream, App.AssetManager.GetCustomAsset("legacy", entry)))
-                        database = reader.ReadDb();
-
-                    metaStream?.Dispose();
-                });
-                firstTimeLoad = false;
-            }
-
-            tableList.ItemsSource = database.Tables;
-            tableList.SelectedIndex = currentTableIndex;
-        }
-
-        void Thumb_DragDelta(object sender, DragDeltaEventArgs e)
-        {
-            if (e.OriginalSource is Thumb senderAsThumb)
-            {
-                if (!(senderAsThumb.TemplatedParent is GridViewColumnHeader header))
-                    return;
-
-                if (header.Column.ActualWidth < MinColumnWidth)
-                    header.Column.Width = MinColumnWidth;
-            }
-
-            //if (header.Column.ActualWidth > MaxColumnWidth)
-            //    header.Column.Width = MaxColumnWidth;
-        }
+    foreach (LegacyDbColumn column in table.Columns) {
+      GridViewColumn gvColumn = new GridViewColumn() {
+        HeaderTemplate = Template.Resources["gvColumnTemplate"] as DataTemplate,
+        Header = column,
+      };
+      Binding b = new Binding(".") {
+        Converter = new ColumnRowConverter(),
+        ConverterParameter = column.Name
+      };
+      gvColumn.DisplayMemberBinding = b;
+      gridView.Columns.Add(gvColumn);
     }
+
+    tableView.ItemsSource = table.Rows;
+  }
+
+  private void LegacyDbEditor_Loaded(object sender, System.Windows.RoutedEventArgs e) {
+    if (firstTimeLoad) {
+      AssetEntry entry = AssetEntry;
+      FrostyTaskWindow.Show("Loading Database", "", (task) => {
+        string metaName = entry.Name.Replace(".db", "-meta.xml");
+        LegacyFileEntry metaEntry = App.AssetManager.GetCustomAssetEntry<LegacyFileEntry>("legacy", metaName);
+        Stream metaStream = null;
+
+        if (metaEntry == null) {
+          string filename = "Resources/Meta/" + entry.Filename + "-meta.xml";
+          if (File.Exists(filename))
+            metaStream = new FileStream(filename, FileMode.Open, FileAccess.Read);
+        }
+        else {
+          metaStream = App.AssetManager.GetCustomAsset("legacy", metaEntry);
+        }
+
+        using (LegacyDbReader reader = new LegacyDbReader(metaStream, App.AssetManager.GetCustomAsset("legacy", entry)))
+          database = reader.ReadDb();
+
+        metaStream?.Dispose();
+      });
+      firstTimeLoad = false;
+    }
+
+    tableList.ItemsSource = database.Tables;
+    tableList.SelectedIndex = currentTableIndex;
+  }
+
+  void Thumb_DragDelta(object sender, DragDeltaEventArgs e) {
+    if (e.OriginalSource is Thumb senderAsThumb) {
+      if (!(senderAsThumb.TemplatedParent is GridViewColumnHeader header))
+        return;
+
+      if (header.Column.ActualWidth < MinColumnWidth)
+        header.Column.Width = MinColumnWidth;
+    }
+
+    //if (header.Column.ActualWidth > MaxColumnWidth)
+    //    header.Column.Width = MaxColumnWidth;
+  }
 }

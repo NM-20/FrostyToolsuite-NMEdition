@@ -1,5 +1,7 @@
-﻿using LuaPlugin;
-using Frosty.Core.Attributes;
+﻿using Frosty.Core.Attributes;
+
+using LuaPlugin;
+
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;

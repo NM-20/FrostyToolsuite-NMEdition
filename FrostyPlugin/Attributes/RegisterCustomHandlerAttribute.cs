@@ -1,32 +1,29 @@
 ﻿using FrostySdk.Managers;
+
 using System;
 
-namespace Frosty.Core.Attributes
-{
-    public enum CustomHandlerType
-    {
-        Ebx,
-        Res
-    }
+namespace Frosty.Core.Attributes;
 
-    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
-    public class RegisterCustomHandlerAttribute : Attribute
-    {
-        public CustomHandlerType HandlerType { get; set; }
-        public Type HandlerClassType { get; set; }
+public enum CustomHandlerType {
+  Ebx,
+  Res
+}
 
-        // Ebx
-        public string EbxType { get; set; }
+[AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
+public class RegisterCustomHandlerAttribute : Attribute {
+  public CustomHandlerType HandlerType { get; set; }
+  public Type HandlerClassType { get; set; }
 
-        // Res
-        public ResourceType ResType { get; set; }
+  // Ebx
+  public string EbxType { get; set; }
 
-        public RegisterCustomHandlerAttribute(CustomHandlerType inType, Type inClassType, ResourceType resType = ResourceType.Invalid, string ebxType = "")
-        {
-            HandlerType = inType;
-            HandlerClassType = inClassType;
-            ResType = resType;
-            EbxType = ebxType;
-        }
-    }
+  // Res
+  public ResourceType ResType { get; set; }
+
+  public RegisterCustomHandlerAttribute(CustomHandlerType inType, Type inClassType, ResourceType resType = ResourceType.Invalid, string ebxType = "") {
+    HandlerType = inType;
+    HandlerClassType = inClassType;
+    ResType = resType;
+    EbxType = ebxType;
+  }
 }

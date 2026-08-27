@@ -1,18 +1,15 @@
-﻿namespace FrostySdk.Ebx
-{
-    public struct FileRef
-    {
-        private string fileName;
+﻿namespace FrostySdk.Ebx;
 
-        public FileRef(string value)
-        {
-            fileName = value;
-        }
+public struct FileRef {
+  private string fileName;
 
-        public static implicit operator string(FileRef value) => value.fileName;
+  public FileRef(string value) {
+    fileName = value;
+  }
 
-        public static implicit operator FileRef(string value) => new FileRef(value);
+  public static implicit operator string(FileRef value) => value.fileName;
 
-        public override string ToString() => "FileRef '" + fileName + "'";
-    }
+  public static implicit operator FileRef(string value) => new FileRef(value);
+
+  public override string ToString() => "FileRef '" + fileName + "'";
 }

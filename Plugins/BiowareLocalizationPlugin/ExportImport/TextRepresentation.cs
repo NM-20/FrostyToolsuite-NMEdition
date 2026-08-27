@@ -1,46 +1,42 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace BiowareLocalizationPlugin.ExportImport
-{
-    [Serializable()]
-    [XmlRoot("TextFile", Namespace = "", IsNullable = false)]
-    public class TextFile
-    {
+namespace BiowareLocalizationPlugin.ExportImport;
 
-        public string LanguageFormat { get; set; }
+[Serializable()]
+[XmlRoot("TextFile", Namespace = "", IsNullable = false)]
+public class TextFile {
 
-        [XmlArray("Texts")]
-        [XmlArrayItem("TextRepresentation")]
-        public TextRepresentation[] Texts { get; set; }
+  public string LanguageFormat { get; set; }
 
-        //[CanBeNull]
-        [XmlArray("DeclinatedAdjectives", IsNullable = true)]
-        [XmlArrayItem("DeclinatedAdjective")]
-        public DeclinatedAdjectiveRepresentation[] DeclinatedAdjectives { get; set; }
-    }
+  [XmlArray("Texts")]
+  [XmlArrayItem("TextRepresentation")]
+  public TextRepresentation[] Texts { get; set; }
 
-    [Serializable()]
-    public class TextRepresentation
-    {
-        public string TextId { get; set; }
-        public string Text { get; set; }
+  //[CanBeNull]
+  [XmlArray("DeclinatedAdjectives", IsNullable = true)]
+  [XmlArrayItem("DeclinatedAdjective")]
+  public DeclinatedAdjectiveRepresentation[] DeclinatedAdjectives { get; set; }
+}
 
-        [XmlArray("Resources")]
-        [XmlArrayItem("TextResource")]
-        public string[] Resources { get; set; }
-    }
+[Serializable()]
+public class TextRepresentation {
+  public string TextId { get; set; }
+  public string Text { get; set; }
 
-    [Serializable()]
-    public class DeclinatedAdjectiveRepresentation
-    {
+  [XmlArray("Resources")]
+  [XmlArrayItem("TextResource")]
+  public string[] Resources { get; set; }
+}
 
-        public string Resource { get; set; }
+[Serializable()]
+public class DeclinatedAdjectiveRepresentation {
 
-        public string AdjectiveId { get; set; }
+  public string Resource { get; set; }
 
-        [XmlArray("Declinations")]
-        [XmlArrayItem("Declination")]
-        public string[] Declinations { get; set; }
-    }
+  public string AdjectiveId { get; set; }
+
+  [XmlArray("Declinations")]
+  [XmlArrayItem("Declination")]
+  public string[] Declinations { get; set; }
 }

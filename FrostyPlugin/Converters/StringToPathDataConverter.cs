@@ -2,26 +2,22 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Frosty.Core.Converters
-{
-    public class StringToPathDataConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            //string str = value as string;
-            //Type type = TypeLibrary.GetType(str);
+namespace Frosty.Core.Converters;
 
-            //IconAttribute iconAttr = type.GetCustomAttribute<IconAttribute>();
-            //if (iconAttr == null)
-            //    return (App.Current.Resources["BlankAsset"] as System.Windows.Shapes.Path).Data as Geometry;
+public class StringToPathDataConverter : IValueConverter {
+  public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+    //string str = value as string;
+    //Type type = TypeLibrary.GetType(str);
 
-            //return (App.Current.Resources[iconAttr.Icon] as System.Windows.Shapes.Path).Data as Geometry;
-            return null;
-        }
+    //IconAttribute iconAttr = type.GetCustomAttribute<IconAttribute>();
+    //if (iconAttr == null)
+    //    return (App.Current.Resources["BlankAsset"] as System.Windows.Shapes.Path).Data as Geometry;
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return "";
-        }
-    }
+    //return (App.Current.Resources[iconAttr.Icon] as System.Windows.Shapes.Path).Data as Geometry;
+    return null;
+  }
+
+  public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+    return "";
+  }
 }

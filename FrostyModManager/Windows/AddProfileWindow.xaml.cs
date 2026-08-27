@@ -1,51 +1,45 @@
-﻿using System.Windows;
-using Frosty.Controls;
+﻿using Frosty.Controls;
 
-namespace FrostyModManager
-{
-    /// <summary>
-    /// Interaction logic for AddProfileWindow.xaml
-    /// </summary>
-    public partial class AddProfileWindow : FrostyDockableWindow
-    {
-        public string ProfileName { get; set; }
+using System.Windows;
 
-        public AddProfileWindow(string title = "Add Profile")
-        {
-            InitializeComponent();
+namespace FrostyModManager;
 
-            this.Title = title;
+/// <summary>
+/// Interaction logic for AddProfileWindow.xaml
+/// </summary>
+public partial class AddProfileWindow : FrostyDockableWindow {
+  public string ProfileName { get; set; }
 
-            Window mainWin = Application.Current.MainWindow;
-            if (mainWin != null)
-            {
-                double x = mainWin.Left + (mainWin.Width / 2.0);
-                double y = mainWin.Top + (mainWin.Height / 2.0);
+  public AddProfileWindow(string title = "Add Profile") {
+    InitializeComponent();
 
-                Left = x - (Width / 2.0);
-                Top = y - (Height / 2.0);
-            }
+    this.Title = title;
 
-            profileNameTextBox.Focus();
-        }
+    Window mainWin = Application.Current.MainWindow;
+    if (mainWin != null) {
+      double x = mainWin.Left + (mainWin.Width / 2.0);
+      double y = mainWin.Top + (mainWin.Height / 2.0);
 
-        private void cancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-            Close();
-        }
-
-        private void addButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (profileNameTextBox.Text == "")
-            {
-                FrostyMessageBox.Show("Profile name must not be empty", "Frosty Mod Manager");
-                return;
-            }
-
-            ProfileName = profileNameTextBox.Text.Trim();
-            DialogResult = true;
-            Close();
-        }
+      Left = x - (Width / 2.0);
+      Top = y - (Height / 2.0);
     }
+
+    profileNameTextBox.Focus();
+  }
+
+  private void cancelButton_Click(object sender, RoutedEventArgs e) {
+    DialogResult = false;
+    Close();
+  }
+
+  private void addButton_Click(object sender, RoutedEventArgs e) {
+    if (profileNameTextBox.Text == "") {
+      FrostyMessageBox.Show("Profile name must not be empty", "Frosty Mod Manager");
+      return;
+    }
+
+    ProfileName = profileNameTextBox.Text.Trim();
+    DialogResult = true;
+    Close();
+  }
 }

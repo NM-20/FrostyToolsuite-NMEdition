@@ -1,5 +1,7 @@
-﻿using LocalizedStringPlugin;
-using Frosty.Core.Attributes;
+﻿using Frosty.Core.Attributes;
+
+using LocalizedStringPlugin;
+
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;

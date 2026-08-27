@@ -8,26 +8,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:fdev="FrostyDeveloper">
 
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/FrostyControls;component/Themes/Generic.xaml"/>
-    </ResourceDictionary.MergedDictionaries>
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="/FrostyControls;component/Themes/Generic.xaml"/>
+  </ResourceDictionary.MergedDictionaries>
 
-    <!-- DifficultyWeaponTableEditor -->
-    <Style TargetType="{x:Type lctrl:DifficultyWeaponTableEditor}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type lctrl:DifficultyWeaponTableEditor}">
-                    <Grid>
-                        <ctrl:FrostyDockablePanel Grid.Column="0"
+  <!-- DifficultyWeaponTableEditor -->
+  <Style TargetType="{x:Type lctrl:DifficultyWeaponTableEditor}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type lctrl:DifficultyWeaponTableEditor}">
+          <Grid>
+            <ctrl:FrostyDockablePanel Grid.Column="0"
                                                   Title=""
                                                   TitleBarVisible="False">
-                            <core:FrostyPropertyGrid x:Name="PART_AssetPropertyGrid"
+              <core:FrostyPropertyGrid x:Name="PART_AssetPropertyGrid"
                                                      Asset="{Binding Asset, RelativeSource={RelativeSource TemplatedParent}}" />
-                        </ctrl:FrostyDockablePanel>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+            </ctrl:FrostyDockablePanel>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
 
 </ResourceDictionary>

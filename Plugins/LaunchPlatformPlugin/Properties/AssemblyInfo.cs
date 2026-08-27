@@ -1,6 +1,8 @@
 ﻿using Frosty.Core.Attributes;
+
 using LaunchPlatformPlugin.Actions;
 using LaunchPlatformPlugin.Options;
+
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;

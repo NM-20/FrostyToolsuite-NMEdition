@@ -1,67 +1,61 @@
 ﻿using Frosty.Controls;
 using Frosty.Core;
 using Frosty.Core.Windows;
+
 using FrostySdk.IO;
 using FrostySdk.Managers;
+
 using System;
 using System.IO;
 using System.Windows.Forms;
 using System.Windows.Media;
 
-namespace EbxToXmlPlugin
-{
-    public class EbxToXmlMenuExtension : MenuExtension
-    {
-        internal static ImageSource imageSource = new ImageSourceConverter().ConvertFromString("pack://application:,,,/EbxToXmlPlugin;component/Images/EbxToXml.png") as ImageSource;
+namespace EbxToXmlPlugin;
 
-        public override string TopLevelMenuName => "Tools";
-        public override string SubLevelMenuName => null;
+public class EbxToXmlMenuExtension : MenuExtension {
+  internal static ImageSource imageSource = new ImageSourceConverter().ConvertFromString("pack://application:,,,/EbxToXmlPlugin;component/Images/EbxToXml.png") as ImageSource;
 
-        public override string MenuItemName => "Export EBX to XML";
-        public override ImageSource Icon => imageSource;
+  public override string TopLevelMenuName => "Tools";
+  public override string SubLevelMenuName => null;
 
-        public override RelayCommand MenuItemClicked => new RelayCommand((o) =>
-        {
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-            if (fbd.ShowDialog() == DialogResult.OK)
-            {
-                string outDir = fbd.SelectedPath;
-                FrostyTaskWindow.Show("Exporting EBX", "", (task) =>
-                {
-                    uint totalCount = App.AssetManager.GetEbxCount();
-                    uint idx = 0;
+  public override string MenuItemName => "Export EBX to XML";
+  public override ImageSource Icon => imageSource;
 
-                    foreach (EbxAssetEntry entry in App.AssetManager.EnumerateEbx())
-                    {
-                        task.Update(entry.Name, (idx++ / (double)totalCount) * 100.0d);
+  public override RelayCommand MenuItemClicked => new RelayCommand((o) => {
+    FolderBrowserDialog fbd = new FolderBrowserDialog();
+    if (fbd.ShowDialog() == DialogResult.OK) {
+      string outDir = fbd.SelectedPath;
+      FrostyTaskWindow.Show("Exporting EBX", "", (task) => {
+        uint totalCount = App.AssetManager.GetEbxCount();
+        uint idx = 0;
 
-                        string fullPath = outDir + "/" + entry.Path + "/";
+        foreach (EbxAssetEntry entry in App.AssetManager.EnumerateEbx()) {
+          task.Update(entry.Name, (idx++ / (double)totalCount) * 100.0d);
 
-                        string filename = entry.Filename + ".xml";
-                        filename = string.Concat(filename.Split(Path.GetInvalidFileNameChars()));
+          string fullPath = outDir + "/" + entry.Path + "/";
 
-                        if (File.Exists(fullPath + filename))
-                            continue;
+          string filename = entry.Filename + ".xml";
+          filename = string.Concat(filename.Split(Path.GetInvalidFileNameChars()));
 
-                        try
-                        {
-                            DirectoryInfo di = new DirectoryInfo(fullPath);
-                            if (!di.Exists)
-                                Directory.CreateDirectory(di.FullName);
+          if (File.Exists(fullPath + filename))
+            continue;
 
-                            EbxAsset asset = App.AssetManager.GetEbx(entry);
-                            using (EbxXmlWriter writer = new EbxXmlWriter(new FileStream(fullPath + filename, FileMode.Create), App.AssetManager))
-                                writer.WriteObjects(asset.Objects);
-                        }
-                        catch (Exception)
-                        {
-                            App.Logger.Log("Failed to export {0}", entry.Filename);
-                        }
-                    }
-                });
+          try {
+            DirectoryInfo di = new DirectoryInfo(fullPath);
+            if (!di.Exists)
+              Directory.CreateDirectory(di.FullName);
 
-                FrostyMessageBox.Show("Successfully exported EBX to " + outDir, "Frosty Editor");
-            }
-        });
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            using (EbxXmlWriter writer = new EbxXmlWriter(new FileStream(fullPath + filename, FileMode.Create), App.AssetManager))
+              writer.WriteObjects(asset.Objects);
+          }
+          catch (Exception) {
+            App.Logger.Log("Failed to export {0}", entry.Filename);
+          }
+        }
+      });
+
+      FrostyMessageBox.Show("Successfully exported EBX to " + outDir, "Frosty Editor");
     }
+  });
 }

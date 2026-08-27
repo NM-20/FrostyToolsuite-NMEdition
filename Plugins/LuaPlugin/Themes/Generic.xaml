@@ -8,136 +8,136 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:fdev="FrostyDeveloper">
 
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/FrostyControls;component/Themes/Generic.xaml"/>
-    </ResourceDictionary.MergedDictionaries>
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="/FrostyControls;component/Themes/Generic.xaml"/>
+  </ResourceDictionary.MergedDictionaries>
 
-    <!-- FrostyCompiledLuaEditor -->
-    <Style TargetType="{x:Type local:FrostyCompiledLuaEditor}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:FrostyCompiledLuaEditor}">
-                    <Grid>
+  <!-- FrostyCompiledLuaEditor -->
+  <Style TargetType="{x:Type local:FrostyCompiledLuaEditor}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type local:FrostyCompiledLuaEditor}">
+          <Grid>
 
-                        <ctrl:FrostyDockablePanel Grid.Column="0" TitleBarVisible="False" Margin="0">
+            <ctrl:FrostyDockablePanel Grid.Column="0" TitleBarVisible="False" Margin="0">
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="26"/>
+                  <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <Border Margin="1">
+                  <DockPanel>
+                    <Border Background="{StaticResource ControlBackground}" CornerRadius="2">
+                      <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="0,0,6,0">
+                        <Button x:Name="PART_ExportButton" ToolTip="Export Lua bytecode" Margin="6,0,0,0">
+                          <Button.Content>
                             <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="26"/>
-                                    <RowDefinition Height="1*"/>
-                                </Grid.RowDefinitions>
-
-                                <Border Margin="1">
-                                    <DockPanel>
-                                        <Border Background="{StaticResource ControlBackground}" CornerRadius="2">
-                                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="0,0,6,0">
-                                                <Button x:Name="PART_ExportButton" ToolTip="Export Lua bytecode" Margin="6,0,0,0">
-                                                    <Button.Content>
-                                                        <Grid>
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="22"/>
-                                                                <ColumnDefinition Width="*"/>
-                                                            </Grid.ColumnDefinitions>
-                                                            <Image Grid.Column="0" Width="14" Source="/FrostyEditor;component/Images/Export.png"/>
-                                                            <TextBlock Grid.Column="1" Text="Export" Margin="0,0,4,0"/>
-                                                        </Grid>
-                                                    </Button.Content>
-                                                </Button>
-                                                <Button x:Name="PART_ImportButton" ToolTip="Import Lua source" Margin="6,0,0,0">
-                                                    <Button.Content>
-                                                        <Grid>
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="22"/>
-                                                                <ColumnDefinition Width="*"/>
-                                                            </Grid.ColumnDefinitions>
-                                                            <Image Grid.Column="0" Width="14" Source="/FrostyEditor;component/Images/Import.png"/>
-                                                            <TextBlock Grid.Column="1" Text="Import" Margin="0,0,4,0"/>
-                                                        </Grid>
-                                                    </Button.Content>
-                                                </Button>
-                                            </StackPanel>
-                                        </Border>
-                                        <Border Background="{StaticResource ControlBackground}" CornerRadius="2" Margin="1,0,0,0">
-                                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="6,0,6,0">
-                                                <Button x:Name="PART_CompileButton" ToolTip="Compile Lua source">
-                                                    <Button.Content>
-                                                        <Grid>
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="22"/>
-                                                                <ColumnDefinition Width="*"/>
-                                                            </Grid.ColumnDefinitions>
-                                                            <Image Grid.Column="0" Width="14" Source="/FrostyEditor;component/Images/Compile.png"/>
-                                                            <TextBlock Grid.Column="1" Text="Compile" Margin="0,0,4,0"/>
-                                                        </Grid>
-                                                    </Button.Content>
-                                                </Button>
-                                            </StackPanel>
-                                        </Border>
-                                        <Border Background="{StaticResource ControlBackground}" CornerRadius="2" Margin="1,0,0,0"/>
-                                    </DockPanel>
-                                </Border>
-                                <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Grid.Row="1" Focusable="False">
-                                    <codeeditor:CodeEditor x:Name="PART_TextEditor" Grid.Row="1" Background="{StaticResource ListBackground}"/>
-                                </ScrollViewer>
+                              <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="22"/>
+                                <ColumnDefinition Width="*"/>
+                              </Grid.ColumnDefinitions>
+                              <Image Grid.Column="0" Width="14" Source="/FrostyEditor;component/Images/Export.png"/>
+                              <TextBlock Grid.Column="1" Text="Export" Margin="0,0,4,0"/>
                             </Grid>
-                        </ctrl:FrostyDockablePanel>
+                          </Button.Content>
+                        </Button>
+                        <Button x:Name="PART_ImportButton" ToolTip="Import Lua source" Margin="6,0,0,0">
+                          <Button.Content>
+                            <Grid>
+                              <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="22"/>
+                                <ColumnDefinition Width="*"/>
+                              </Grid.ColumnDefinitions>
+                              <Image Grid.Column="0" Width="14" Source="/FrostyEditor;component/Images/Import.png"/>
+                              <TextBlock Grid.Column="1" Text="Import" Margin="0,0,4,0"/>
+                            </Grid>
+                          </Button.Content>
+                        </Button>
+                      </StackPanel>
+                    </Border>
+                    <Border Background="{StaticResource ControlBackground}" CornerRadius="2" Margin="1,0,0,0">
+                      <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="6,0,6,0">
+                        <Button x:Name="PART_CompileButton" ToolTip="Compile Lua source">
+                          <Button.Content>
+                            <Grid>
+                              <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="22"/>
+                                <ColumnDefinition Width="*"/>
+                              </Grid.ColumnDefinitions>
+                              <Image Grid.Column="0" Width="14" Source="/FrostyEditor;component/Images/Compile.png"/>
+                              <TextBlock Grid.Column="1" Text="Compile" Margin="0,0,4,0"/>
+                            </Grid>
+                          </Button.Content>
+                        </Button>
+                      </StackPanel>
+                    </Border>
+                    <Border Background="{StaticResource ControlBackground}" CornerRadius="2" Margin="1,0,0,0"/>
+                  </DockPanel>
+                </Border>
+                <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Grid.Row="1" Focusable="False">
+                  <codeeditor:CodeEditor x:Name="PART_TextEditor" Grid.Row="1" Background="{StaticResource ListBackground}"/>
+                </ScrollViewer>
+              </Grid>
+            </ctrl:FrostyDockablePanel>
 
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
 
-    <!-- FrostyLuaEditor -->
-    <Style TargetType="{x:Type local:FrostyLuaEditor}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:FrostyLuaEditor}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="26"/>
-                            <RowDefinition Height="1*"/>
-                        </Grid.RowDefinitions>
+  <!-- FrostyLuaEditor -->
+  <Style TargetType="{x:Type local:FrostyLuaEditor}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type local:FrostyLuaEditor}">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="26"/>
+              <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
 
-                        <Border Margin="1">
-                            <DockPanel>
-                                <Border Background="{StaticResource ControlBackground}" CornerRadius="2">
-                                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="0,0,6,0">
-                                        <Button x:Name="PART_ExportButton" ToolTip="Export Lua bytecode" Margin="6,0,0,0">
-                                            <Button.Content>
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="22"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <Image Grid.Column="0" Width="14" Source="/FrostyEditor;component/Images/Export.png"/>
-                                                    <TextBlock Grid.Column="1" Text="Export" Margin="0,0,4,0"/>
-                                                </Grid>
-                                            </Button.Content>
-                                        </Button>
-                                        <Button x:Name="PART_ImportButton" ToolTip="Import Lua source" Margin="6,0,0,0">
-                                            <Button.Content>
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="22"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <Image Grid.Column="0" Width="14" Source="/FrostyEditor;component/Images/Import.png"/>
-                                                    <TextBlock Grid.Column="1" Text="Import" Margin="0,0,4,0"/>
-                                                </Grid>
-                                            </Button.Content>
-                                        </Button>
-                                    </StackPanel>
-                                </Border>
-                            </DockPanel>
-                        </Border>
+            <Border Margin="1">
+              <DockPanel>
+                <Border Background="{StaticResource ControlBackground}" CornerRadius="2">
+                  <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="0,0,6,0">
+                    <Button x:Name="PART_ExportButton" ToolTip="Export Lua bytecode" Margin="6,0,0,0">
+                      <Button.Content>
+                        <Grid>
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="22"/>
+                            <ColumnDefinition Width="*"/>
+                          </Grid.ColumnDefinitions>
+                          <Image Grid.Column="0" Width="14" Source="/FrostyEditor;component/Images/Export.png"/>
+                          <TextBlock Grid.Column="1" Text="Export" Margin="0,0,4,0"/>
+                        </Grid>
+                      </Button.Content>
+                    </Button>
+                    <Button x:Name="PART_ImportButton" ToolTip="Import Lua source" Margin="6,0,0,0">
+                      <Button.Content>
+                        <Grid>
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="22"/>
+                            <ColumnDefinition Width="*"/>
+                          </Grid.ColumnDefinitions>
+                          <Image Grid.Column="0" Width="14" Source="/FrostyEditor;component/Images/Import.png"/>
+                          <TextBlock Grid.Column="1" Text="Import" Margin="0,0,4,0"/>
+                        </Grid>
+                      </Button.Content>
+                    </Button>
+                  </StackPanel>
+                </Border>
+              </DockPanel>
+            </Border>
 
-                        <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Grid.Row="1" Focusable="False">
-                            <codeeditor:CodeEditor x:Name="PART_TextEditor" Grid.Row="1"/>
-                        </ScrollViewer>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+            <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Grid.Row="1" Focusable="False">
+              <codeeditor:CodeEditor x:Name="PART_TextEditor" Grid.Row="1"/>
+            </ScrollViewer>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
 
 </ResourceDictionary>

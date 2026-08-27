@@ -7,23 +7,23 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:fdev="FrostyDeveloper">
 
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/FrostyControls;component/Themes/Generic.xaml"/>
-    </ResourceDictionary.MergedDictionaries>
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="/FrostyControls;component/Themes/Generic.xaml"/>
+  </ResourceDictionary.MergedDictionaries>
 
-    <!-- LegacyTextEditor -->
-    <Style TargetType="{x:Type local:LegacyTextEditor}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:LegacyTextEditor}">
-                    <Grid>
-                        <ctrl:FrostyDockablePanel Grid.Column="0" Title="" TitleBarVisible="False">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="0"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <!--<Border Margin="1">
+  <!-- LegacyTextEditor -->
+  <Style TargetType="{x:Type local:LegacyTextEditor}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type local:LegacyTextEditor}">
+          <Grid>
+            <ctrl:FrostyDockablePanel Grid.Column="0" Title="" TitleBarVisible="False">
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="0"/>
+                  <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!--<Border Margin="1">
                                     <DockPanel>
                                         <Border Background="{StaticResource ControlBackground}" CornerRadius="2">
                                             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="0,0,6,0">
@@ -55,15 +55,15 @@
                                         </Border>
                                     </DockPanel>
                                 </Border>-->
-                                <Grid Grid.Row="1">
-                                    <TextBox x:Name="PART_TextBox" Padding="4" IsReadOnly="True" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" FontFamily="Consolas"/>
-                                </Grid>
-                            </Grid>
-                        </ctrl:FrostyDockablePanel>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    
+                <Grid Grid.Row="1">
+                  <TextBox x:Name="PART_TextBox" Padding="4" IsReadOnly="True" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" FontFamily="Consolas"/>
+                </Grid>
+              </Grid>
+            </ctrl:FrostyDockablePanel>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
 </ResourceDictionary>

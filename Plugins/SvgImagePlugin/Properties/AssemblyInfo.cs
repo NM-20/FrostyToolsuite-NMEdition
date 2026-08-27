@@ -1,5 +1,7 @@
-﻿using SvgImagePlugin;
-using Frosty.Core.Attributes;
+﻿using Frosty.Core.Attributes;
+
+using SvgImagePlugin;
+
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;

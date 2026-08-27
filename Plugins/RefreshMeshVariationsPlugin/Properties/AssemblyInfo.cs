@@ -1,5 +1,7 @@
-﻿using RefreshMeshVariationsPlugin;
-using Frosty.Core.Attributes;
+﻿using Frosty.Core.Attributes;
+
+using RefreshMeshVariationsPlugin;
+
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;

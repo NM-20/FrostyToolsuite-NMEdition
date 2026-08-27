@@ -1,7 +1,10 @@
 ﻿using BiowareLocalizationPlugin;
+
 using Frosty.Core.Attributes;
+
 using FrostySdk;
 using FrostySdk.Managers;
+
 using System.Runtime.InteropServices;
 using System.Windows;
 

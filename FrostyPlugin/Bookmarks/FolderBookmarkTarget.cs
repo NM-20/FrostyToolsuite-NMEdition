@@ -1,28 +1,23 @@
 ﻿using System.Windows.Media;
 
-namespace Frosty.Core.Bookmarks
-{
-    public class FolderBookmarkTarget : BookmarkTarget
-    {
-        private static readonly ImageSource FolderSource = new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyEditor;component/Images/OpenFolder.png") as ImageSource;
+namespace Frosty.Core.Bookmarks;
 
-        public override string Text => "";
+public class FolderBookmarkTarget : BookmarkTarget {
+  private static readonly ImageSource FolderSource = new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyEditor;component/Images/OpenFolder.png") as ImageSource;
 
-        public override ImageSource Icon => FolderSource;
+  public override string Text => "";
 
-        public override void LoadData(string serializedData)
-        {
-            // Do nothing
-        }
+  public override ImageSource Icon => FolderSource;
 
-        public override void NavigateTo(bool bOpen)
-        {
-            // Do nothing
-        }
+  public override void LoadData(string serializedData) {
+    // Do nothing
+  }
 
-        protected override string SerializeData()
-        {
-            return "";
-        }
-    }
+  public override void NavigateTo(bool bOpen) {
+    // Do nothing
+  }
+
+  protected override string SerializeData() {
+    return "";
+  }
 }

@@ -1,7 +1,9 @@
 ﻿using Frosty.Core.Attributes;
+
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
+
 using TestPlugin.Definitions;
 using TestPlugin.EditorExecutions;
 using TestPlugin.Extensions;

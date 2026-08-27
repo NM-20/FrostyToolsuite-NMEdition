@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Frosty.Core.Mod
-{
-    public interface IFrostyMod
-    {
-        FrostyModDetails ModDetails { get; }
-        IEnumerable<string> Warnings { get; }
-        bool HasWarnings { get; }
-        string Filename { get; }
-        string Path { get; }
-    }
+namespace Frosty.Core.Mod;
+
+public interface IFrostyMod {
+  FrostyModDetails ModDetails { get; }
+  IEnumerable<string> Warnings { get; }
+  bool HasWarnings { get; }
+  string Filename { get; }
+  string Path { get; }
 }

@@ -1,101 +1,81 @@
 ﻿using System;
 
-namespace Frosty.Core.Viewport
-{
-    [Flags]
-    public enum MouseButton
-    {
-        None = 0,
-        Left = 1,
-        Middle = 2,
-        Right = 4
-    }
-    public abstract class Screen : IDisposable
-    {
-        public IViewport Viewport { get; private set; }
+namespace Frosty.Core.Viewport;
 
-        public Screen()
-        {
-        }
+[Flags]
+public enum MouseButton {
+  None = 0,
+  Left = 1,
+  Middle = 2,
+  Right = 4
+}
+public abstract class Screen : IDisposable {
+  public IViewport Viewport { get; private set; }
 
-        public void SetViewport(IViewport inViewport)
-        {
-            Viewport = inViewport;
-        }
+  public Screen() {
+  }
 
-        public virtual void Dispose()
-        {
+  public void SetViewport(IViewport inViewport) {
+    Viewport = inViewport;
+  }
 
-        }
+  public virtual void Dispose() {
 
-        public abstract void Update(double timestep);
+  }
 
-        public abstract void Render();
+  public abstract void Update(double timestep);
 
-        public virtual void CreateSizeDependentBuffers()
-        {
-        }
+  public abstract void Render();
 
-        public virtual void CreateBuffers()
-        {
-        }
+  public virtual void CreateSizeDependentBuffers() {
+  }
 
-        public virtual void DisposeSizeDependentBuffers()
-        {
-        }
+  public virtual void CreateBuffers() {
+  }
 
-        public virtual void DisposeBuffers()
-        {
-        }
+  public virtual void DisposeSizeDependentBuffers() {
+  }
 
-        public virtual void Opened()
-        {
+  public virtual void DisposeBuffers() {
+  }
 
-        }
+  public virtual void Opened() {
 
-        public virtual void Closed()
-        {
+  }
 
-        }
+  public virtual void Closed() {
 
-        public virtual void MouseDown(int x, int y, MouseButton button)
-        {
+  }
 
-        }
+  public virtual void MouseDown(int x, int y, MouseButton button) {
 
-        public virtual void MouseMove(int x, int y)
-        {
+  }
 
-        }
+  public virtual void MouseMove(int x, int y) {
 
-        public virtual void MouseUp(int x, int y, MouseButton button)
-        {
+  }
 
-        }
+  public virtual void MouseUp(int x, int y, MouseButton button) {
 
-        public virtual void MouseLeave()
-        {
+  }
 
-        }
+  public virtual void MouseLeave() {
 
-        public virtual void MouseScroll(int delta)
-        {
+  }
 
-        }
+  public virtual void MouseScroll(int delta) {
 
-        public virtual void KeyDown(int key)
-        {
+  }
 
-        }
+  public virtual void KeyDown(int key) {
 
-        public virtual void KeyUp(int key)
-        {
+  }
 
-        }
+  public virtual void KeyUp(int key) {
 
-        public virtual void CharTyped(char ch)
-        {
+  }
 
-        }
-    }
+  public virtual void CharTyped(char ch) {
+
+  }
 }

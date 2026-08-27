@@ -1,87 +1,72 @@
 ﻿using System;
 
-namespace FrostySdk.Ebx
-{
-    public struct CString
-    {
-        private string strValue;
+namespace FrostySdk.Ebx;
 
-        public CString(string value = "") => strValue = value;
+public struct CString {
+  private string strValue;
 
-        public CString Sanitize() => new CString(strValue.Trim('\v', '\r', '\n', '\t'));
+  public CString(string value = "") => strValue = value;
 
-        public static implicit operator string(CString value) => value.strValue ?? (value.strValue = "");
+  public CString Sanitize() => new CString(strValue.Trim('\v', '\r', '\n', '\t'));
 
-        public static implicit operator CString(string value) => new CString(value);
+  public static implicit operator string(CString value) => value.strValue ?? (value.strValue = "");
 
-        public bool IsNull() => strValue == null;
+  public static implicit operator CString(string value) => new CString(value);
 
-        public override string ToString() => strValue;
+  public bool IsNull() => strValue == null;
 
-        public override int GetHashCode()
-        {
-            if (strValue == null)
-                return "".GetHashCode();
+  public override string ToString() => strValue;
 
-            return strValue.GetHashCode();
-        }
-        
-        public override bool Equals(object obj)
-        {
-            if (obj is CString b)
-            {
-                if (strValue == null)
-                {
-                    return string.IsNullOrEmpty(b.strValue);
-                }
+  public override int GetHashCode() {
+    if (strValue == null)
+      return "".GetHashCode();
 
-                if (b.strValue == null)
-                {
-                    return string.IsNullOrEmpty(strValue);
-                }
+    return strValue.GetHashCode();
+  }
 
-                return strValue.Equals(b.strValue);
-            }
-            
-            if (obj is string b1)
-            {
-                if (strValue == null)
-                {
-                    return b1 == "";
-                }
+  public override bool Equals(object obj) {
+    if (obj is CString b) {
+      if (strValue == null) {
+        return string.IsNullOrEmpty(b.strValue);
+      }
 
-                return strValue.Equals(b1);
-            }
-            return false;
-        }
+      if (b.strValue == null) {
+        return string.IsNullOrEmpty(strValue);
+      }
 
-        public bool Equals(object obj, StringComparison comparison)
-        {
-            if (obj is CString b)
-            {
-                if (strValue == null)
-                {
-                    return string.IsNullOrEmpty(b.strValue);
-                }
-
-                if (b.strValue == null)
-                {
-                    return string.IsNullOrEmpty(strValue);
-                }
-
-                return strValue.Equals(b.strValue, comparison);
-            }
-            
-            if (obj is string b1)
-            {
-                if (strValue == null)
-                {
-                    return b1 == "";
-                }
-
-                return strValue.Equals(b1, comparison);
-            }
-            return false;
-        }
+      return strValue.Equals(b.strValue);
     }
+
+    if (obj is string b1) {
+      if (strValue == null) {
+        return b1 == "";
+      }
+
+      return strValue.Equals(b1);
+    }
+    return false;
+  }
+
+  public bool Equals(object obj, StringComparison comparison) {
+    if (obj is CString b) {
+      if (strValue == null) {
+        return string.IsNullOrEmpty(b.strValue);
+      }
+
+      if (b.strValue == null) {
+        return string.IsNullOrEmpty(strValue);
+      }
+
+      return strValue.Equals(b.strValue, comparison);
+    }
+
+    if (obj is string b1) {
+      if (strValue == null) {
+        return b1 == "";
+      }
+
+      return strValue.Equals(b1, comparison);
+    }
+    return false;
+  }
 }

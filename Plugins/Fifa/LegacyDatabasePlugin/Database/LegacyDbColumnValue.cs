@@ -1,17 +1,14 @@
-﻿namespace LegacyDatabasePlugin.Database
-{
-    public class LegacyDbColumnValue
-    {
-        public LegacyDbColumn Column => column;
-        public object Value { get => columnValue; set => columnValue = value; }
+﻿namespace LegacyDatabasePlugin.Database;
 
-        private LegacyDbColumn column;
-        private object columnValue;
+public class LegacyDbColumnValue {
+  public LegacyDbColumn Column => column;
+  public object Value { get => columnValue; set => columnValue = value; }
 
-        public LegacyDbColumnValue(LegacyDbColumn inColumn, object inValue)
-        {
-            column = inColumn;
-            columnValue = inValue;
-        }
-    }
+  private LegacyDbColumn column;
+  private object columnValue;
+
+  public LegacyDbColumnValue(LegacyDbColumn inColumn, object inValue) {
+    column = inColumn;
+    columnValue = inValue;
+  }
 }

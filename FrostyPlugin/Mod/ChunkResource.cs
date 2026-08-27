@@ -1,57 +1,52 @@
 ﻿using FrostySdk.IO;
 using FrostySdk.Managers;
+
 using System;
 
-namespace Frosty.Core.Mod
-{
-    public class ChunkResource : BaseModResource
-    {
-        public override ModResourceType Type => ModResourceType.Chunk;
+namespace Frosty.Core.Mod;
 
-        protected uint rangeStart;
-        protected uint rangeEnd;
-        protected uint logicalOffset;
-        protected uint logicalSize;
-        protected int h32;
-        protected int firstMip;
+public class ChunkResource : BaseModResource {
+  public override ModResourceType Type => ModResourceType.Chunk;
 
-        public ChunkResource()
-        {
-        }
+  protected uint rangeStart;
+  protected uint rangeEnd;
+  protected uint logicalOffset;
+  protected uint logicalSize;
+  protected int h32;
+  protected int firstMip;
 
-        internal ChunkResource(ChunkAssetEntry entry)
-            : base(entry)
-        {
-        }
+  public ChunkResource() {
+  }
 
-        public override void Read(NativeReader reader)
-        {
-            base.Read(reader);
+  internal ChunkResource(ChunkAssetEntry entry)
+      : base(entry) {
+  }
 
-            rangeStart = reader.ReadUInt();
-            rangeEnd = reader.ReadUInt();
-            logicalOffset = reader.ReadUInt();
-            logicalSize = reader.ReadUInt();
-            h32 = reader.ReadInt();
-            firstMip = reader.ReadInt();
-        }
+  public override void Read(NativeReader reader) {
+    base.Read(reader);
 
-        public override void FillAssetEntry(object entry)
-        {
-            base.FillAssetEntry(entry);
-            ChunkAssetEntry chunkEntry = entry as ChunkAssetEntry;
+    rangeStart = reader.ReadUInt();
+    rangeEnd = reader.ReadUInt();
+    logicalOffset = reader.ReadUInt();
+    logicalSize = reader.ReadUInt();
+    h32 = reader.ReadInt();
+    firstMip = reader.ReadInt();
+  }
 
-            chunkEntry.Id = new Guid(name);
-            chunkEntry.RangeStart = rangeStart;
-            chunkEntry.RangeEnd = rangeEnd;
-            chunkEntry.LogicalOffset = logicalOffset;
-            chunkEntry.LogicalSize = logicalSize;
-            chunkEntry.H32 = h32;
-            chunkEntry.FirstMip = firstMip;
-            chunkEntry.IsTocChunk = IsTocChunk;
+  public override void FillAssetEntry(object entry) {
+    base.FillAssetEntry(entry);
+    ChunkAssetEntry chunkEntry = entry as ChunkAssetEntry;
 
-            if (chunkEntry.FirstMip == -1 && chunkEntry.RangeStart != 0)
-                chunkEntry.FirstMip = 0;
-        }
-    }
+    chunkEntry.Id = new Guid(name);
+    chunkEntry.RangeStart = rangeStart;
+    chunkEntry.RangeEnd = rangeEnd;
+    chunkEntry.LogicalOffset = logicalOffset;
+    chunkEntry.LogicalSize = logicalSize;
+    chunkEntry.H32 = h32;
+    chunkEntry.FirstMip = firstMip;
+    chunkEntry.IsTocChunk = IsTocChunk;
+
+    if (chunkEntry.FirstMip == -1 && chunkEntry.RangeStart != 0)
+      chunkEntry.FirstMip = 0;
+  }
 }

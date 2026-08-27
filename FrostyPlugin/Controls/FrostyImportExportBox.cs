@@ -1,59 +1,52 @@
 ﻿using Frosty.Controls;
+
 using System.Collections.Generic;
 using System.Windows;
 
-namespace Frosty.Core.Controls
-{
-    public enum FrostyImportExportType
-    {
-        Import,
-        Export
-    }
+namespace Frosty.Core.Controls;
 
-    public class FrostyImportExportBox : FrostyDockableWindow
-    {
-        public MessageBoxResult Result { get; set; }
-        public IEnumerable<object> OptionsData { get; private set; }
-        public bool IsImport { get; private set; }
+public enum FrostyImportExportType {
+  Import,
+  Export
+}
 
-        public FrostyImportExportBox()
-        {
-            Topmost = true;
-            ShowInTaskbar = false;
-            ResizeMode = ResizeMode.NoResize;
-            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+public class FrostyImportExportBox : FrostyDockableWindow {
+  public MessageBoxResult Result { get; set; }
+  public IEnumerable<object> OptionsData { get; private set; }
+  public bool IsImport { get; private set; }
 
-            Width = 600;
-            Height = 300;
+  public FrostyImportExportBox() {
+    Topmost = true;
+    ShowInTaskbar = false;
+    ResizeMode = ResizeMode.NoResize;
+    WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            Window win = Application.Current.MainWindow;
-            Icon = win.Icon;
+    Width = 600;
+    Height = 300;
 
-            Result = MessageBoxResult.Cancel;
-        }
+    Window win = Application.Current.MainWindow;
+    Icon = win.Icon;
 
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-        }
+    Result = MessageBoxResult.Cancel;
+  }
 
-        public void RequestClose(MessageBoxResult result)
-        {
-            Result = result;
-            Close();
-        }
+  public override void OnApplyTemplate() {
+    base.OnApplyTemplate();
+  }
 
-        public static MessageBoxResult Show<OptionsType>(string title, FrostyImportExportType type, OptionsType data)
-        {
-            FrostyImportExportBox window = new FrostyImportExportBox
-            {
-                Title = title,
-                OptionsData = new object[] {data},
-                IsImport = (type == FrostyImportExportType.Import)
-            };
+  public void RequestClose(MessageBoxResult result) {
+    Result = result;
+    Close();
+  }
 
-            window.ShowDialog();
-            return window.Result;
-        }
-    }
+  public static MessageBoxResult Show<OptionsType>(string title, FrostyImportExportType type, OptionsType data) {
+    FrostyImportExportBox window = new FrostyImportExportBox {
+      Title = title,
+      OptionsData = new object[] { data },
+      IsImport = (type == FrostyImportExportType.Import)
+    };
+
+    window.ShowDialog();
+    return window.Result;
+  }
 }

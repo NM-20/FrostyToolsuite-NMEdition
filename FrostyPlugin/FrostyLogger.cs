@@ -1,5 +1,7 @@
 ﻿using Frosty.Core.Attributes;
+
 using FrostySdk.Interfaces;
+
 using System;
 using System.ComponentModel;
 using System.Reflection;
@@ -7,67 +9,59 @@ using System.Text;
 using System.Windows;
 using System.Windows.Data;
 
-namespace FrostyCore
-{
-    public class FrostyLogger : ILogger, INotifyPropertyChanged
-    {
-        public string LogText => sb.ToString();
-        private StringBuilder sb = new StringBuilder();
+namespace FrostyCore;
 
-        public void Log(string text, params object[] vars)
-        {
-            Assembly assembly = Assembly.GetCallingAssembly();
-            string category = "[Core] ";
-            var attr = assembly.GetCustomAttribute<PluginDisplayNameAttribute>();
+public class FrostyLogger : ILogger, INotifyPropertyChanged {
+  public string LogText => sb.ToString();
+  private StringBuilder sb = new StringBuilder();
 
-            if (attr != null)
-                category = "[" + attr.DisplayName + "] ";
+  public void Log(string text, params object[] vars) {
+    Assembly assembly = Assembly.GetCallingAssembly();
+    string category = "[Core] ";
+    var attr = assembly.GetCustomAttribute<PluginDisplayNameAttribute>();
 
-            sb.AppendLine(string.Format("[" + DateTime.Now.ToLongTimeString() + "]: " + category + text, vars));
-            RaisePropertyChanged("LogText");
-        }
+    if (attr != null)
+      category = "[" + attr.DisplayName + "] ";
 
-        public void LogWarning(string text, params object[] vars)
-        {
-            Assembly assembly = Assembly.GetCallingAssembly();
-            string category = "[Core] ";
-            var attr = assembly.GetCustomAttribute<PluginDisplayNameAttribute>();
+    sb.AppendLine(string.Format("[" + DateTime.Now.ToLongTimeString() + "]: " + category + text, vars));
+    RaisePropertyChanged("LogText");
+  }
 
-            if (attr != null)
-                category = "[" + attr.DisplayName + "] ";
+  public void LogWarning(string text, params object[] vars) {
+    Assembly assembly = Assembly.GetCallingAssembly();
+    string category = "[Core] ";
+    var attr = assembly.GetCustomAttribute<PluginDisplayNameAttribute>();
 
-            sb.AppendLine(string.Format("[" + DateTime.Now.ToLongTimeString() + "]: " + category + "(WARNING) " + text, vars));
-            RaisePropertyChanged("LogText");
-        }
+    if (attr != null)
+      category = "[" + attr.DisplayName + "] ";
 
-        public void LogError(string text, params object[] vars)
-        {
-            Assembly assembly = Assembly.GetCallingAssembly();
-            string category = "[Core] ";
-            var attr = assembly.GetCustomAttribute<PluginDisplayNameAttribute>();
+    sb.AppendLine(string.Format("[" + DateTime.Now.ToLongTimeString() + "]: " + category + "(WARNING) " + text, vars));
+    RaisePropertyChanged("LogText");
+  }
 
-            if (attr != null)
-                category = "[" + attr.DisplayName + "] ";
+  public void LogError(string text, params object[] vars) {
+    Assembly assembly = Assembly.GetCallingAssembly();
+    string category = "[Core] ";
+    var attr = assembly.GetCustomAttribute<PluginDisplayNameAttribute>();
 
-            sb.AppendLine(string.Format("[" + DateTime.Now.ToLongTimeString() + "]: " + category + "(ERROR) " + text, vars));
-            RaisePropertyChanged("LogText");
-        }
+    if (attr != null)
+      category = "[" + attr.DisplayName + "] ";
 
-        public void AddBinding(UIElement elementToBind, DependencyProperty propertyToBind)
-        {
-            Binding b = new Binding("LogText")
-            {
-                Source = this,
-                Mode = BindingMode.OneWay
-            };
+    sb.AppendLine(string.Format("[" + DateTime.Now.ToLongTimeString() + "]: " + category + "(ERROR) " + text, vars));
+    RaisePropertyChanged("LogText");
+  }
 
-            BindingOperations.SetBinding(elementToBind, propertyToBind, b);
-        }
+  public void AddBinding(UIElement elementToBind, DependencyProperty propertyToBind) {
+    Binding b = new Binding("LogText") {
+      Source = this,
+      Mode = BindingMode.OneWay
+    };
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void RaisePropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-    }
+    BindingOperations.SetBinding(elementToBind, propertyToBind, b);
+  }
+
+  public event PropertyChangedEventHandler PropertyChanged;
+  protected void RaisePropertyChanged(string name) {
+    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+  }
 }

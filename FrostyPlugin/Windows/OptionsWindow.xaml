@@ -9,26 +9,26 @@
         mc:Ignorable="d"
         Title="Options" Height="720" Width="600" Loaded="OptionsWindow_Loaded"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen" SnapsToDevicePixels="True">
-    <Grid Background="{StaticResource WindowBackground}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="38"/>
-            <RowDefinition/>
-            <RowDefinition Height="38"/>
-        </Grid.RowDefinitions>
+  <Grid Background="{StaticResource WindowBackground}">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="38"/>
+      <RowDefinition/>
+      <RowDefinition Height="38"/>
+    </Grid.RowDefinitions>
 
-        <Grid Background="{StaticResource ListBackground}">
-            <TextBlock Text="Some options will require a restart of Frosty before becoming active" DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3" Foreground="{StaticResource FontColor}" FontSize="16" FontFamily="Global User Interface"/>
-        </Grid>
-
-        <ctrl:FrostyTabControl x:Name="optionsTabControl" Grid.Row="1"/>
-
-        <Border Grid.Row="2" Background="{StaticResource ListBackground}">
-            <Grid Margin="8">
-                <DockPanel LastChildFill="False">
-                    <Button x:Name="cancelButton" Content="Cancel" DockPanel.Dock="Left" Width="75" Click="cancelButton_Click"/>
-                    <Button x:Name="saveButton" Content="Save" DockPanel.Dock="Right" Width="75" Click="saveButton_Click"/>
-                </DockPanel>
-            </Grid>
-        </Border>
+    <Grid Background="{StaticResource ListBackground}">
+      <TextBlock Text="Some options will require a restart of Frosty before becoming active" DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3" Foreground="{StaticResource FontColor}" FontSize="16" FontFamily="Global User Interface"/>
     </Grid>
+
+    <ctrl:FrostyTabControl x:Name="optionsTabControl" Grid.Row="1"/>
+
+    <Border Grid.Row="2" Background="{StaticResource ListBackground}">
+      <Grid Margin="8">
+        <DockPanel LastChildFill="False">
+          <Button x:Name="cancelButton" Content="Cancel" DockPanel.Dock="Left" Width="75" Click="cancelButton_Click"/>
+          <Button x:Name="saveButton" Content="Save" DockPanel.Dock="Right" Width="75" Click="saveButton_Click"/>
+        </DockPanel>
+      </Grid>
+    </Border>
+  </Grid>
 </ctrl:FrostyDockableWindow>

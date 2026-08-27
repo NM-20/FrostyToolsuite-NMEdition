@@ -1,18 +1,14 @@
 ﻿using System.Windows;
 
-namespace Frosty.Controls
-{
-    public class FrostyDockableWindow : FrostyWindow
-    {
-        public DependencyObject WindowParent { get; set; }
+namespace Frosty.Controls;
 
-        static FrostyDockableWindow()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(FrostyDockableWindow), new FrameworkPropertyMetadata(typeof(FrostyDockableWindow)));
-        }
+public class FrostyDockableWindow : FrostyWindow {
+  public DependencyObject WindowParent { get; set; }
 
-        public FrostyDockableWindow()
-        {
-        }
-    }
+  static FrostyDockableWindow() {
+    DefaultStyleKeyProperty.OverrideMetadata(typeof(FrostyDockableWindow), new FrameworkPropertyMetadata(typeof(FrostyDockableWindow)));
+  }
+
+  public FrostyDockableWindow() {
+  }
 }

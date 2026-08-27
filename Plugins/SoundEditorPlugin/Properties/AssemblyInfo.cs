@@ -1,5 +1,7 @@
 ﻿using Frosty.Core.Attributes;
+
 using SoundEditorPlugin;
+
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;

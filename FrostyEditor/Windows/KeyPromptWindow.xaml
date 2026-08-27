@@ -8,28 +8,28 @@
         mc:Ignorable="d"
         Title="Enter Key" Height="200" Width="325"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-    <Grid Background="{StaticResource ListBackground}">
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="30"/>
-        </Grid.RowDefinitions>
-        
-        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="4,7,4,4">
-            <TextBlock Grid.Column="0" Text="The developers cannot provide the encryption key." Foreground="{StaticResource FontColor}"  VerticalAlignment="Center" Margin="2,1" FontWeight="Bold" HorizontalAlignment="Center"/>
-            <TextBlock Grid.Column="0" Text="This game requires an encryption key before you can" Foreground="{StaticResource FontColor}" VerticalAlignment="Center" Margin="2,15,2,0"/>
-            <TextBlock Grid.Column="0" Text="access the game files." Foreground="{StaticResource FontColor}" VerticalAlignment="Center" Margin="2,1"/>
-            <TextBlock Grid.Column="0" Text="Please enter the encryption key:" Foreground="{StaticResource FontColor}" VerticalAlignment="Center" Margin="2,18,2,6"/>
-            <TextBox Grid.Column="1" x:Name="keyTextBox" BorderThickness="1" VerticalContentAlignment="Center" Height="22" />
-        </StackPanel>
+  <Grid Background="{StaticResource ListBackground}">
+    <Grid.RowDefinitions>
+      <RowDefinition/>
+      <RowDefinition Height="30"/>
+    </Grid.RowDefinitions>
 
-        <Grid Grid.Row="1" Margin="4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+    <StackPanel Grid.Row="0" Orientation="Vertical" Margin="4,7,4,4">
+      <TextBlock Grid.Column="0" Text="The developers cannot provide the encryption key." Foreground="{StaticResource FontColor}"  VerticalAlignment="Center" Margin="2,1" FontWeight="Bold" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="0" Text="This game requires an encryption key before you can" Foreground="{StaticResource FontColor}" VerticalAlignment="Center" Margin="2,15,2,0"/>
+      <TextBlock Grid.Column="0" Text="access the game files." Foreground="{StaticResource FontColor}" VerticalAlignment="Center" Margin="2,1"/>
+      <TextBlock Grid.Column="0" Text="Please enter the encryption key:" Foreground="{StaticResource FontColor}" VerticalAlignment="Center" Margin="2,18,2,6"/>
+      <TextBox Grid.Column="1" x:Name="keyTextBox" BorderThickness="1" VerticalContentAlignment="Center" Height="22" />
+    </StackPanel>
 
-            <Button Grid.Column="0" x:Name="cancelButton" Content="Cancel" Width="50" Height="22" HorizontalAlignment="Left" Click="cancelButton_Click"/>
-            <Button Grid.Column="1" x:Name="doneButton" Content="Done" Width="50" Height="22" HorizontalAlignment="Right" Click="doneButton_Click"/>
-        </Grid>
+    <Grid Grid.Row="1" Margin="4">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+
+      <Button Grid.Column="0" x:Name="cancelButton" Content="Cancel" Width="50" Height="22" HorizontalAlignment="Left" Click="cancelButton_Click"/>
+      <Button Grid.Column="1" x:Name="doneButton" Content="Done" Width="50" Height="22" HorizontalAlignment="Right" Click="doneButton_Click"/>
     </Grid>
+  </Grid>
 </ctrl:FrostyDockableWindow>

@@ -1,5 +1,7 @@
 ﻿using ChunkResEditorPlugin;
+
 using Frosty.Core.Attributes;
+
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;

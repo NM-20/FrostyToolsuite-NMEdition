@@ -1,28 +1,22 @@
-﻿namespace Frosty.Core.IO
-{
-    public class ExeReader : MemoryReader
-    {
-        public override long Position
-        {
-            get => position;
-            set => position = theExe.getOffset(value);
-        }
+﻿namespace Frosty.Core.IO;
 
-        private readonly Executable theExe;
-        public ExeReader(Executable exe)
-        {
-            theExe = exe;
-        }
+public class ExeReader : MemoryReader {
+  public override long Position {
+    get => position;
+    set => position = theExe.getOffset(value);
+  }
 
-        public override void Dispose()
-        {
-            theExe.Dispose();
-        }
+  private readonly Executable theExe;
+  public ExeReader(Executable exe) {
+    theExe = exe;
+  }
 
-        protected override void FillBuffer(int numBytes)
-        {
-            theExe.getBytes(position, buffer, numBytes);
-            position += numBytes;
-        }
-    }
+  public override void Dispose() {
+    theExe.Dispose();
+  }
+
+  protected override void FillBuffer(int numBytes) {
+    theExe.getBytes(position, buffer, numBytes);
+    position += numBytes;
+  }
 }

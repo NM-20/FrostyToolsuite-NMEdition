@@ -4,19 +4,16 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Frosty.Core.Converters
-{
-    public class TreeViewListSortConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            IList collection = (IList)value;
-            ListCollectionView view = new ListCollectionView(collection);
-            view.SortDescriptions.Add(new SortDescription(parameter.ToString(), ListSortDirection.Ascending));
+namespace Frosty.Core.Converters;
 
-            return view;
-        }
+public class TreeViewListSortConverter : IValueConverter {
+  public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+    IList collection = (IList)value;
+    ListCollectionView view = new ListCollectionView(collection);
+    view.SortDescriptions.Add(new SortDescription(parameter.ToString(), ListSortDirection.Ascending));
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw null;
-    }
+    return view;
+  }
+
+  public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw null;
 }

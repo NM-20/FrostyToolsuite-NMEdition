@@ -1,18 +1,14 @@
 ﻿using FrostySdk.Managers;
 
-namespace Frosty.Core.Mod
-{
-    public class EbxResource : BaseModResource
-    {
-        public override ModResourceType Type => ModResourceType.Ebx;
+namespace Frosty.Core.Mod;
 
-        public EbxResource()
-        {
-        }
+public class EbxResource : BaseModResource {
+  public override ModResourceType Type => ModResourceType.Ebx;
 
-        internal EbxResource(EbxAssetEntry entry)
-            : base(entry)
-        {
-        }
-    }
+  public EbxResource() {
+  }
+
+  internal EbxResource(EbxAssetEntry entry)
+      : base(entry) {
+  }
 }

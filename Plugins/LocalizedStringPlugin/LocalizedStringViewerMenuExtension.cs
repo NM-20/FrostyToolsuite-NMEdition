@@ -1,20 +1,18 @@
 ﻿using Frosty.Core;
+
 using System.Windows.Media;
 
-namespace LocalizedStringPlugin
-{
-    public class LocalizedStringViewerMenuExtension : MenuExtension
-    {
-        internal static ImageSource imageSource = new ImageSourceConverter().ConvertFromString("pack://application:,,,/LocalizedStringPlugin;component/Images/LocalizedStringViewer.png") as ImageSource;
+namespace LocalizedStringPlugin;
 
-        public override string TopLevelMenuName => "View";
-        public override string SubLevelMenuName => null;
-        public override string MenuItemName => "Localized String Editor";
-        public override ImageSource Icon => imageSource;
+public class LocalizedStringViewerMenuExtension : MenuExtension {
+  internal static ImageSource imageSource = new ImageSourceConverter().ConvertFromString("pack://application:,,,/LocalizedStringPlugin;component/Images/LocalizedStringViewer.png") as ImageSource;
 
-        public override RelayCommand MenuItemClicked => new RelayCommand((o) =>
-        {
-            App.EditorWindow.OpenEditor("Localized String Editor", new FrostyLocalizedStringViewer(App.Logger));
-        });
-    }
+  public override string TopLevelMenuName => "View";
+  public override string SubLevelMenuName => null;
+  public override string MenuItemName => "Localized String Editor";
+  public override ImageSource Icon => imageSource;
+
+  public override RelayCommand MenuItemClicked => new RelayCommand((o) => {
+    App.EditorWindow.OpenEditor("Localized String Editor", new FrostyLocalizedStringViewer(App.Logger));
+  });
 }

@@ -1,53 +1,46 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Frosty.Controls
-{
-    [TemplatePart(Name = PART_Watermark, Type = typeof(TextBlock))]
-    public class FrostyWatermarkTextBox : TextBox
-    {
-        private const string PART_Watermark = "PART_Watermark";
+namespace Frosty.Controls;
 
-        #region -- Properties --
+[TemplatePart(Name = PART_Watermark, Type = typeof(TextBlock))]
+public class FrostyWatermarkTextBox : TextBox {
+  private const string PART_Watermark = "PART_Watermark";
 
-        #region -- WatermarkText --
+  #region -- Properties --
 
-        public static readonly DependencyProperty WatermarkTextProperty = DependencyProperty.Register("WatermarkText", typeof(string), typeof(FrostyWatermarkTextBox), new FrameworkPropertyMetadata(""));
-        public string WatermarkText
-        {
-            get => (string)GetValue(WatermarkTextProperty);
-            set => SetValue(WatermarkTextProperty, value);
-        }
+  #region -- WatermarkText --
 
-        #endregion
+  public static readonly DependencyProperty WatermarkTextProperty = DependencyProperty.Register("WatermarkText", typeof(string), typeof(FrostyWatermarkTextBox), new FrameworkPropertyMetadata(""));
+  public string WatermarkText {
+    get => (string)GetValue(WatermarkTextProperty);
+    set => SetValue(WatermarkTextProperty, value);
+  }
 
-        #endregion
+  #endregion
 
-        private TextBlock watermarkTextBlock;
+  #endregion
 
-        static FrostyWatermarkTextBox()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(FrostyWatermarkTextBox), new FrameworkPropertyMetadata(typeof(FrostyWatermarkTextBox)));
-        }
+  private TextBlock watermarkTextBlock;
 
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
+  static FrostyWatermarkTextBox() {
+    DefaultStyleKeyProperty.OverrideMetadata(typeof(FrostyWatermarkTextBox), new FrameworkPropertyMetadata(typeof(FrostyWatermarkTextBox)));
+  }
 
-            watermarkTextBlock = GetTemplateChild(PART_Watermark) as TextBlock;
-            GotFocus += FrostyWatermarkTextBox_GotFocus;
-            LostFocus += FrostyWatermarkTextBox_LostFocus;
-        }
+  public override void OnApplyTemplate() {
+    base.OnApplyTemplate();
 
-        private void FrostyWatermarkTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if(Text == "")
-                watermarkTextBlock.Visibility = Visibility.Visible;
-        }
+    watermarkTextBlock = GetTemplateChild(PART_Watermark) as TextBlock;
+    GotFocus += FrostyWatermarkTextBox_GotFocus;
+    LostFocus += FrostyWatermarkTextBox_LostFocus;
+  }
 
-        private void FrostyWatermarkTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            watermarkTextBlock.Visibility = Visibility.Collapsed;
-        }
-    }
+  private void FrostyWatermarkTextBox_LostFocus(object sender, RoutedEventArgs e) {
+    if (Text == "")
+      watermarkTextBlock.Visibility = Visibility.Visible;
+  }
+
+  private void FrostyWatermarkTextBox_GotFocus(object sender, RoutedEventArgs e) {
+    watermarkTextBlock.Visibility = Visibility.Collapsed;
+  }
 }

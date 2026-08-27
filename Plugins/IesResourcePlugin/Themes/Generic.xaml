@@ -7,30 +7,30 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:fdev="FrostyDeveloper">
 
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/FrostyControls;component/Themes/Generic.xaml"/>
-    </ResourceDictionary.MergedDictionaries>
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="/FrostyControls;component/Themes/Generic.xaml"/>
+  </ResourceDictionary.MergedDictionaries>
 
-    <!-- FrostyIesResourceEditor -->
-    <Style TargetType="{x:Type local:FrostyIesResourceEditor}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:FrostyIesResourceEditor}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3*"/>
-                            <ColumnDefinition Width="2*"/>
-                        </Grid.ColumnDefinitions>
-                        <ctrl:FrostyDockablePanel Grid.Column="0" Title="" TitleBarVisible="False">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="26"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <Border Margin="1">
-                                    <DockPanel>
-                                        <Border Background="{StaticResource ControlBackground}" CornerRadius="2">
-                                            <!--<StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="0,0,6,0">
+  <!-- FrostyIesResourceEditor -->
+  <Style TargetType="{x:Type local:FrostyIesResourceEditor}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type local:FrostyIesResourceEditor}">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="3*"/>
+              <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <ctrl:FrostyDockablePanel Grid.Column="0" Title="" TitleBarVisible="False">
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="26"/>
+                  <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border Margin="1">
+                  <DockPanel>
+                    <Border Background="{StaticResource ControlBackground}" CornerRadius="2">
+                      <!--<StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="0,0,6,0">
                                                 <Button x:Name="PART_ExportButton" ToolTip="Export to SVG" Margin="6,0,0,0">
                                                     <Button.Content>
                                                         <Grid>
@@ -56,24 +56,24 @@
                                                     </Button.Content>
                                                 </Button>
                                             </StackPanel>-->
-                                        </Border>
-                                    </DockPanel>
-                                </Border>
-                                <Grid Grid.Row="1" x:Name="bkgnd" Background="Black">
-                                    <Viewbox>
-                                        <core:FrostyViewport x:Name="PART_Renderer"/>
-                                    </Viewbox>
-                                </Grid>
-                            </Grid>
-                        </ctrl:FrostyDockablePanel>
-                        <GridSplitter Grid.Column="1" Width="3" VerticalAlignment="Stretch" Background="Transparent" HorizontalAlignment="Left"/>
-                        <ctrl:FrostyDockablePanel Grid.Column="1" Title="Properties" Icon="/FrostyEditor;component/Images/Properties.png" Margin="3,0,0,0">
-                            <core:FrostyPropertyGrid x:Name="PART_AssetPropertyGrid" Asset="{Binding Asset, RelativeSource={RelativeSource TemplatedParent}}" Modified="{Binding AssetModified, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
-                        </ctrl:FrostyDockablePanel>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    
+                    </Border>
+                  </DockPanel>
+                </Border>
+                <Grid Grid.Row="1" x:Name="bkgnd" Background="Black">
+                  <Viewbox>
+                    <core:FrostyViewport x:Name="PART_Renderer"/>
+                  </Viewbox>
+                </Grid>
+              </Grid>
+            </ctrl:FrostyDockablePanel>
+            <GridSplitter Grid.Column="1" Width="3" VerticalAlignment="Stretch" Background="Transparent" HorizontalAlignment="Left"/>
+            <ctrl:FrostyDockablePanel Grid.Column="1" Title="Properties" Icon="/FrostyEditor;component/Images/Properties.png" Margin="3,0,0,0">
+              <core:FrostyPropertyGrid x:Name="PART_AssetPropertyGrid" Asset="{Binding Asset, RelativeSource={RelativeSource TemplatedParent}}" Modified="{Binding AssetModified, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+            </ctrl:FrostyDockablePanel>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
 </ResourceDictionary>

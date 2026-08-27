@@ -1,11 +1,14 @@
-﻿using MeshSetPlugin;
-using Frosty.Core.Attributes;
+﻿using Frosty.Core.Attributes;
+
+using FrostySdk.Managers;
+
+using MeshSetPlugin;
+using MeshSetPlugin.Handlers;
+
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Markup;
-using MeshSetPlugin.Handlers;
-using FrostySdk.Managers;
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from

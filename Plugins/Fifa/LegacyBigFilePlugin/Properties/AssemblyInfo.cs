@@ -1,6 +1,9 @@
 ﻿using Frosty.Core.Attributes;
+
 using FrostySdk;
+
 using LegacyBigFilePlugin;
+
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;

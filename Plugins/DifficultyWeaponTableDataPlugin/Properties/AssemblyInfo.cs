@@ -1,6 +1,8 @@
 ﻿using DifficultyWeaponTableDataPlugin.Definitions;
 using DifficultyWeaponTableDataPlugin.Handlers;
+
 using Frosty.Core.Attributes;
+
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;

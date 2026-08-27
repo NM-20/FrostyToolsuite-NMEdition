@@ -2,63 +2,56 @@
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace Frosty.Core
-{
-    public class RelayCommand : ICommand
-    {
-        #region Fields
+namespace Frosty.Core;
 
-        readonly Action<object> _execute;
-        readonly Predicate<object> _canExecute;
+public class RelayCommand : ICommand {
+  #region Fields
 
-        #endregion // Fields
+  readonly Action<object> _execute;
+  readonly Predicate<object> _canExecute;
 
-        #region Constructors
+  #endregion // Fields
 
-        /// <summary>
-        /// Creates a new command that can always execute.
-        /// </summary>
-        /// <param name="execute">The execution logic.</param>
-        public RelayCommand(Action<object> execute)
-            : this(execute, null)
-        {
-        }
+  #region Constructors
 
-        /// <summary>
-        /// Creates a new command.
-        /// </summary>
-        /// <param name="execute">The execution logic.</param>
-        /// <param name="canExecute">The execution status logic.</param>
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
-        {
-            if (execute == null)
-                throw new ArgumentNullException("execute");
+  /// <summary>
+  /// Creates a new command that can always execute.
+  /// </summary>
+  /// <param name="execute">The execution logic.</param>
+  public RelayCommand(Action<object> execute)
+      : this(execute, null) {
+  }
 
-            _execute = execute;
-            _canExecute = canExecute;
-        }
+  /// <summary>
+  /// Creates a new command.
+  /// </summary>
+  /// <param name="execute">The execution logic.</param>
+  /// <param name="canExecute">The execution status logic.</param>
+  public RelayCommand(Action<object> execute, Predicate<object> canExecute) {
+    if (execute == null)
+      throw new ArgumentNullException("execute");
 
-        #endregion
+    _execute = execute;
+    _canExecute = canExecute;
+  }
 
-        #region ICommand Members
+  #endregion
 
-        [DebuggerStepThrough]
-        public bool CanExecute(object parameters)
-        {
-            return _canExecute == null ? true : _canExecute(parameters);
-        }
+  #region ICommand Members
 
-        public event EventHandler CanExecuteChanged
-        {
-            add => CommandManager.RequerySuggested += value;
-            remove => CommandManager.RequerySuggested -= value;
-        }
+  [DebuggerStepThrough]
+  public bool CanExecute(object parameters) {
+    return _canExecute == null ? true : _canExecute(parameters);
+  }
 
-        public void Execute(object parameters)
-        {
-            _execute(parameters);
-        }
+  public event EventHandler CanExecuteChanged {
+    add => CommandManager.RequerySuggested += value;
+    remove => CommandManager.RequerySuggested -= value;
+  }
 
-        #endregion
-    }
+  public void Execute(object parameters) {
+    _execute(parameters);
+  }
+
+  #endregion
 }

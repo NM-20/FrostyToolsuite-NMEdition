@@ -1,88 +1,92 @@
 ﻿using Frosty.Core.Mod;
+
 using FrostySdk;
 using FrostySdk.IO;
+
 using System.IO;
 
-namespace Frosty.Core.IO
-{
-    public sealed class FrostyModReader : NativeReader
-    {
-        public bool IsValid { get; } = false;
-        public int GameVersion { get; }
-        public uint Version { get; }
+namespace Frosty.Core.IO;
 
-        private readonly long dataOffset;
-        private readonly int dataCount;
+public sealed class FrostyModReader : NativeReader {
+  public bool IsValid { get; } = false;
+  public int GameVersion { get; }
+  public uint Version { get; }
 
-        public FrostyModReader(Stream inStream)
-            : base(inStream)
-        {
-            ulong magic = ReadULong();
-            if (magic != FrostyMod.Magic)
-                return;
+  private readonly long dataOffset;
+  private readonly int dataCount;
 
-            Version = ReadUInt();
-            if (Version > FrostyMod.Version)
-                return;
+  public FrostyModReader(Stream inStream)
+      : base(inStream) {
+    ulong magic = ReadULong();
+    if (magic != FrostyMod.Magic)
+      return;
 
-            dataOffset = ReadLong();
-            dataCount = ReadInt();
+    Version = ReadUInt();
+    if (Version > FrostyMod.Version)
+      return;
 
-            string profileName = ReadSizedString(ReadByte());
-            if (profileName.ToLower() != ProfilesLibrary.ProfileName.ToLower())
-                return;
+    dataOffset = ReadLong();
+    dataCount = ReadInt();
 
-            GameVersion = ReadInt();
-            IsValid = true;
-        }
+    string profileName = ReadSizedString(ReadByte());
+    if (profileName.ToLower() != ProfilesLibrary.ProfileName.ToLower())
+      return;
 
-        public FrostyModDetails ReadModDetails()
-        {
-            return new FrostyModDetails(
-                ReadNullTerminatedString(),
-                ReadNullTerminatedString(),
-                ReadNullTerminatedString(),
-                ReadNullTerminatedString(),
-                ReadNullTerminatedString(),
-                Version >= 5 ? ReadNullTerminatedString() : ""
-                );
-        }
+    GameVersion = ReadInt();
+    IsValid = true;
+  }
 
-        public BaseModResource[] ReadResources()
-        {
-            int count = ReadInt();
-            BaseModResource[] resources = new BaseModResource[count];
+  public FrostyModDetails ReadModDetails() {
+    return new FrostyModDetails(
+        ReadNullTerminatedString(),
+        ReadNullTerminatedString(),
+        ReadNullTerminatedString(),
+        ReadNullTerminatedString(),
+        ReadNullTerminatedString(),
+        Version >= 5 ? ReadNullTerminatedString() : ""
+        );
+  }
 
-            for (int i = 0; i < count; i++)
-            {
-                ModResourceType type = (ModResourceType)ReadByte();
-                switch (type)
-                {
-                    case ModResourceType.Embedded: resources[i] = new EmbeddedResource(); break;
-                    case ModResourceType.Ebx: resources[i] = new EbxResource(); break;
-                    case ModResourceType.Res: resources[i] = new ResResource(); break;
-                    case ModResourceType.Chunk: resources[i] = new ChunkResource(); break;
-                    case ModResourceType.Bundle: resources[i] = new BundleResource(); break;
-                }
+  public BaseModResource[] ReadResources() {
+    int count = ReadInt();
+    BaseModResource[] resources = new BaseModResource[count];
 
-                resources[i].Read(this);
-            }
+    for (int i = 0; i < count; i++) {
+      ModResourceType type = (ModResourceType)ReadByte();
+      switch (type) {
+      case ModResourceType.Embedded:
+        resources[i] = new EmbeddedResource();
+        break;
+      case ModResourceType.Ebx:
+        resources[i] = new EbxResource();
+        break;
+      case ModResourceType.Res:
+        resources[i] = new ResResource();
+        break;
+      case ModResourceType.Chunk:
+        resources[i] = new ChunkResource();
+        break;
+      case ModResourceType.Bundle:
+        resources[i] = new BundleResource();
+        break;
+      }
 
-            return resources;
-        }
-
-        public byte[] GetResourceData(BaseModResource resource)
-        {
-            if (resource.ResourceIndex == -1)
-                return null;
-
-            Position = dataOffset + (resource.ResourceIndex * 16);
-
-            long offset = ReadLong();
-            long size = ReadLong();
-
-            Position = dataOffset + (dataCount * 16) + offset;
-            return ReadBytes((int)size);
-        }
+      resources[i].Read(this);
     }
+
+    return resources;
+  }
+
+  public byte[] GetResourceData(BaseModResource resource) {
+    if (resource.ResourceIndex == -1)
+      return null;
+
+    Position = dataOffset + (resource.ResourceIndex * 16);
+
+    long offset = ReadLong();
+    long size = ReadLong();
+
+    Position = dataOffset + (dataCount * 16) + offset;
+    return ReadBytes((int)size);
+  }
 }

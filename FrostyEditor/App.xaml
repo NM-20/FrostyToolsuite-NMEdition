@@ -4,13 +4,13 @@
              ShutdownMode="OnMainWindowClose"
              Startup="Application_Startup"
              StartupUri="Windows/PrelaunchWindow2.xaml">
-    <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/FrostyCore;component/Themes/Generic.xaml"/>
-                <ResourceDictionary Source="/FrostyControls;component/Themes/Generic.xaml"/>
-                <ResourceDictionary Source="/FrostyEditor;component/Themes/Generic.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Application.Resources>
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/FrostyCore;component/Themes/Generic.xaml"/>
+        <ResourceDictionary Source="/FrostyControls;component/Themes/Generic.xaml"/>
+        <ResourceDictionary Source="/FrostyEditor;component/Themes/Generic.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
 </Application>

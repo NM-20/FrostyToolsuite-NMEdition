@@ -1,92 +1,83 @@
 ﻿using Frosty.Core;
 using Frosty.Core.Controls;
+
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+
 using TestPlugin.Managers;
 
-namespace TestPlugin.Controls
-{
-    // Classes that derive from FrostyBaseEditor are used for generic editors, they contain no boiler plate code for loading of any kind of
-    // data, it is left up to the developer to decide on what the editor will do and how it will function.
+namespace TestPlugin.Controls;
 
-    [TemplatePart(Name = PART_ListBox, Type = typeof(ListBox))]
-    [TemplatePart(Name = PART_Contents, Type = typeof(TextBox))]
-    [TemplatePart(Name = PART_DataExplorer, Type = typeof(FrostyDataExplorer))]
-    public class InitFSViewer : FrostyBaseEditor
-    {
-        private const string PART_ListBox = "PART_ListBox";
-        private const string PART_Contents = "PART_Contents";
-        private const string PART_DataExplorer = "PART_DataExplorer";
+// Classes that derive from FrostyBaseEditor are used for generic editors, they contain no boiler plate code for loading of any kind of
+// data, it is left up to the developer to decide on what the editor will do and how it will function.
 
-        private ListBox listBox;
-        private TextBox contentsBox;
-        private FrostyDataExplorer dataExplorer;
+[TemplatePart(Name = PART_ListBox, Type = typeof(ListBox))]
+[TemplatePart(Name = PART_Contents, Type = typeof(TextBox))]
+[TemplatePart(Name = PART_DataExplorer, Type = typeof(FrostyDataExplorer))]
+public class InitFSViewer : FrostyBaseEditor {
+  private const string PART_ListBox = "PART_ListBox";
+  private const string PART_Contents = "PART_Contents";
+  private const string PART_DataExplorer = "PART_DataExplorer";
 
-        private List<FsFileEntry> entries;
+  private ListBox listBox;
+  private TextBox contentsBox;
+  private FrostyDataExplorer dataExplorer;
 
-        private bool firstLoad = true;
+  private List<FsFileEntry> entries;
 
-        static InitFSViewer()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(InitFSViewer), new FrameworkPropertyMetadata(typeof(InitFSViewer)));
-        }
+  private bool firstLoad = true;
 
-        public InitFSViewer()
-        {
-        }
+  static InitFSViewer() {
+    DefaultStyleKeyProperty.OverrideMetadata(typeof(InitFSViewer), new FrameworkPropertyMetadata(typeof(InitFSViewer)));
+  }
 
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
+  public InitFSViewer() {
+  }
 
-            listBox = GetTemplateChild(PART_ListBox) as ListBox;
-            contentsBox = GetTemplateChild(PART_Contents) as TextBox;
-            dataExplorer = GetTemplateChild(PART_DataExplorer) as FrostyDataExplorer;
+  public override void OnApplyTemplate() {
+    base.OnApplyTemplate();
 
-            dataExplorer.SelectionChanged += DataExplorer_SelectionChanged;
-            listBox.SelectionChanged += ListBox_SelectionChanged;
+    listBox = GetTemplateChild(PART_ListBox) as ListBox;
+    contentsBox = GetTemplateChild(PART_Contents) as TextBox;
+    dataExplorer = GetTemplateChild(PART_DataExplorer) as FrostyDataExplorer;
 
-            Loaded += InitFSViewer_Loaded;
-        }
+    dataExplorer.SelectionChanged += DataExplorer_SelectionChanged;
+    listBox.SelectionChanged += ListBox_SelectionChanged;
 
-        private void DataExplorer_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            FsFileEntry entry = dataExplorer.SelectedAsset as FsFileEntry;
+    Loaded += InitFSViewer_Loaded;
+  }
 
-            if (entry != null)
-            {
-                byte[] buf = App.FileSystem.GetFileFromMemoryFs(entry.Name);
+  private void DataExplorer_SelectionChanged(object sender, RoutedEventArgs e) {
+    FsFileEntry entry = dataExplorer.SelectedAsset as FsFileEntry;
 
-                using (TextReader reader = new StreamReader(new MemoryStream(buf)))
-                    contentsBox.Text = reader.ReadToEnd();
-            }
-            else
-            {
-                contentsBox.Text = "";
-            }
-        }
+    if (entry != null) {
+      byte[] buf = App.FileSystem.GetFileFromMemoryFs(entry.Name);
 
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            string filename = listBox.SelectedItem as string;
-            byte[] buf = App.FileSystem.GetFileFromMemoryFs(filename);
-
-            using (TextReader reader = new StreamReader(new MemoryStream(buf)))
-                contentsBox.Text = reader.ReadToEnd();
-        }
-
-        private void InitFSViewer_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (firstLoad)
-            {
-                //listBox.ItemsSource = App.FileSystem.EnumerateFilesInMemoryFs();
-
-                dataExplorer.ItemsSource = App.AssetManager.EnumerateCustomAssets("fs");
-
-                firstLoad = false;
-            }
-        }
+      using (TextReader reader = new StreamReader(new MemoryStream(buf)))
+        contentsBox.Text = reader.ReadToEnd();
     }
+    else {
+      contentsBox.Text = "";
+    }
+  }
+
+  private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+    string filename = listBox.SelectedItem as string;
+    byte[] buf = App.FileSystem.GetFileFromMemoryFs(filename);
+
+    using (TextReader reader = new StreamReader(new MemoryStream(buf)))
+      contentsBox.Text = reader.ReadToEnd();
+  }
+
+  private void InitFSViewer_Loaded(object sender, RoutedEventArgs e) {
+    if (firstLoad) {
+      //listBox.ItemsSource = App.FileSystem.EnumerateFilesInMemoryFs();
+
+      dataExplorer.ItemsSource = App.AssetManager.EnumerateCustomAssets("fs");
+
+      firstLoad = false;
+    }
+  }
 }

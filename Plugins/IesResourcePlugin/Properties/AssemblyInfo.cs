@@ -1,5 +1,7 @@
-﻿using IesResourcePlugin;
-using Frosty.Core.Attributes;
+﻿using Frosty.Core.Attributes;
+
+using IesResourcePlugin;
+
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;

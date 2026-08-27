@@ -1,66 +1,58 @@
 ﻿using FrostySdk.IO;
+
 using System;
 
-namespace FrostySdk.Ebx
-{
-    public struct PointerRef
-    {
-        public EbxImportReference External { get; }
-        public object Internal { get; }
-        public PointerRefType Type { get; }
+namespace FrostySdk.Ebx;
 
-        public PointerRef(EbxImportReference externalRef)
-        {
-            External = externalRef;
-            Internal = null;
-            Type = PointerRefType.External;
-        }
+public struct PointerRef {
+  public EbxImportReference External { get; }
+  public object Internal { get; }
+  public PointerRefType Type { get; }
 
-        public PointerRef(Guid guid)
-        {
-            External = new EbxImportReference { FileGuid = guid, ClassGuid = Guid.Empty };
-            Internal = null;
-            Type = (guid != Guid.Empty) ? PointerRefType.External : PointerRefType.Null;
-        }
+  public PointerRef(EbxImportReference externalRef) {
+    External = externalRef;
+    Internal = null;
+    Type = PointerRefType.External;
+  }
 
-        public PointerRef(object internalRef)
-        {
-            External = new EbxImportReference();
-            Internal = internalRef;
-            Type = PointerRefType.Internal;
-        }
+  public PointerRef(Guid guid) {
+    External = new EbxImportReference { FileGuid = guid, ClassGuid = Guid.Empty };
+    Internal = null;
+    Type = (guid != Guid.Empty) ? PointerRefType.External : PointerRefType.Null;
+  }
 
-        public static bool operator ==(PointerRef A, object B) => A.Equals(B);
+  public PointerRef(object internalRef) {
+    External = new EbxImportReference();
+    Internal = internalRef;
+    Type = PointerRefType.Internal;
+  }
 
-        public static bool operator !=(PointerRef A, object B) => !A.Equals(B);
+  public static bool operator ==(PointerRef A, object B) => A.Equals(B);
 
-        public override bool Equals(object obj)
-        {
-            //if (obj == null)
-            //{
-            //    return false;
-            //}
-            
-            if (obj is PointerRef reference)
-            {
-                return (Type == reference.Type && Internal == reference.Internal && External == reference.External);
-            }
+  public static bool operator !=(PointerRef A, object B) => !A.Equals(B);
 
-            return false;
-        }
+  public override bool Equals(object obj) {
+    //if (obj == null)
+    //{
+    //    return false;
+    //}
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hash = (int)2166136261;
-                hash = (hash * 16777619) ^ Type.GetHashCode();
-                if (Type == PointerRefType.Internal)
-                    hash = (hash * 16777619) ^ Internal.GetHashCode();
-                else if (Type == PointerRefType.External)
-                    hash = (hash * 16777619) ^ External.GetHashCode();
-                return hash;
-            }
-        }
+    if (obj is PointerRef reference) {
+      return (Type == reference.Type && Internal == reference.Internal && External == reference.External);
     }
+
+    return false;
+  }
+
+  public override int GetHashCode() {
+    unchecked {
+      int hash = (int)2166136261;
+      hash = (hash * 16777619) ^ Type.GetHashCode();
+      if (Type == PointerRefType.Internal)
+        hash = (hash * 16777619) ^ Internal.GetHashCode();
+      else if (Type == PointerRefType.External)
+        hash = (hash * 16777619) ^ External.GetHashCode();
+      return hash;
+    }
+  }
 }
